@@ -91,7 +91,7 @@ export default function UserManagementDetails({ firstName, lastName, mobileNumbe
             <Container>
                 <div className='content'>
 
-                    <Typography component='h1'>User's QR Code</Typography>
+                    <Typography component="h1">User&apos;s QR Code</Typography>
 
                     <Grid container>
                         <Grid item md={6}>
