@@ -7,7 +7,7 @@ import CustomButton from '@/components/common/FormFields/CustomButton'
 // *** Icons ***
 import SearchIcon from '@mui/icons-material/Search'
 // *** styles ***
-import styles from '@/assets/styles/__pages/admin/reports.styles.js'
+import styles from '@/assets/styles/__pages/admin/reports.styles'
 import { createUseStyles } from 'react-jss'
 const useStyles = createUseStyles(styles)
 
