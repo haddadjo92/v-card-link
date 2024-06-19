@@ -1,8 +1,5 @@
 import { useState, useCallback, useMemo } from 'react'
-import { Container, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Grid, CircularProgress, Tabs, Box, Tab } from '@mui/material'
-// *** components ***
-import CustomInput from '@/components/common/FormFields/CustomInput'
-import ConfirmDialog from '@/components/common/confirmDialog'
+import { Container, Typography, Tabs, Box, Tab } from '@mui/material'
 // *** tabs ***
 import GenerateNewQR from '@/components/admin/pages/QrCodeGenerator/generateNewQR'
 import GeneratedQRs from '@/components/admin/pages/QrCodeGenerator/GeneratedQRs'

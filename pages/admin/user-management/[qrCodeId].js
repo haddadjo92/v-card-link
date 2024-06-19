@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { Grid, Container, Typography } from '@mui/material'
 import { QRCode } from 'react-qrcode-logo';
 // *** components ***

@@ -1,4 +1,5 @@
 import { Fragment, useMemo } from 'react'
+import { ToastContainer } from 'react-toastify';
 // *** redux ***
 import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
@@ -10,6 +11,9 @@ import MainLayout from '@/layout/MainLayout'
 import GlobalStyles from '@/assets/styles/global.styles'
 import { createUseStyles } from 'react-jss'
 const useGlobalStyles = createUseStyles(GlobalStyles)
+// *** css ***
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function App({ Component, pageProps, ...restAppProps }) {
   useGlobalStyles()
@@ -51,6 +55,7 @@ export default function App({ Component, pageProps, ...restAppProps }) {
             {...pageProps}
             key={router.pathname}
           />
+          <ToastContainer />
         </Layout>
         {/* {() => (
           <Layout>

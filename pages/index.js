@@ -1,6 +1,7 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useRef } from 'react'
 import Head from "next/head";
 import { Container } from '@mui/material'
+import { toast } from 'react-toastify';
 // *** redux ***
 import { wrapper } from '@/store/store';
 // *** components ***
@@ -9,6 +10,7 @@ import CustomButton from '@/components/common/FormFields/CustomButton'
 import CustomInput from '@/components/common/FormFields/CustomInput'
 import CustomDatePicker from '@/components/common/FormFields/CustomDatePicker'
 import CustomSelect from '@/components/common/FormFields/CustomSelect'
+import CustomFileUpload from '@/components/common/FormFields/CustomFileUpload'
 // *** Icons ***
 import AddIcon from '@mui/icons-material/Add'
 
@@ -21,12 +23,21 @@ const options = [
 ]
 
 
-export default function Home({ state }) {  
+export default function Home({ state }) {
 
-  console.log("state: ", state);
+  const inputRef = useRef()
 
-  const [loading, setLoading] = useState(false)
-  const [value, setValue] = useState()
+  // const [loading, setLoading] = useState(false)
+  // const [value, setValue] = useState()
+
+  const [fileUploadValue, setFileUploadValue] = useState()
+
+  const handleFileUploadChange = useCallback((event) => {
+    if(event.target.files.length > 0) {
+      setFileUploadValue(event.target.files[0]);
+    }
+    else setFileUploadValue();      
+  }, [])
 
 
   const handleChange = useCallback((event) => {
@@ -40,6 +51,20 @@ export default function Home({ state }) {
   }, [])
 
 
+
+  const showToast = useCallback(() => {
+    const resolveAfter3Sec = new Promise(resolve => setTimeout(resolve, 3000));
+    toast.promise(
+        resolveAfter3Sec,
+        {
+          pending: 'Promise is pending',
+          success: 'Promise resolved 👌',
+          error: 'Promise rejected 🤯'
+        }
+    )
+    
+  }, [])
+
   return (
     <>
       <Head>
@@ -51,7 +76,7 @@ export default function Home({ state }) {
       <main>
 
         <Container sx={{ mt: 8 }}>
-          <div style={{ marginBottom: 20 }}>
+          {/* <div style={{ marginBottom: 20 }}>
             <CustomButton
               size="small"
               innerText="Button 1"
@@ -148,7 +173,17 @@ export default function Home({ state }) {
           <br />
 
 
-          <button onClick={() => setLoading(!loading)}>Toggle Loading</button>
+          <button onClick={() => setLoading(!loading)}>Toggle Loading</button> */}
+
+
+          <div>
+            <CustomFileUpload
+              ref={inputRef}
+              value={fileUploadValue}
+              onChange={handleFileUploadChange}
+              margin="normal"
+            />
+          </div>
 
 
           <div>
@@ -157,15 +192,16 @@ export default function Home({ state }) {
               name="password"
               labelText="Password"
               placeholder="Password"
-              error
-              helperText="Required Field."
+              // error
+              // helperText="Required Field."
               fullWidth
               margin="normal"
-              required
+            // required
             />
           </div>
 
-          <div>
+
+          {/* <div>
             <CustomSelect
               labelText="Fruit"
               placeholder="Select your favorite fruit"
@@ -208,7 +244,10 @@ export default function Home({ state }) {
               fullWidth
               margin="normal"
             />
-          </div>
+          </div> */}
+
+
+          <button onClick={showToast}>showToast</button>
 
 
         </Container >
