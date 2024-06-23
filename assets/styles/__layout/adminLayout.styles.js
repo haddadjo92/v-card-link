@@ -9,10 +9,14 @@ const AdminLayoutStyles = {
                 "& > div": { // Stack
                     width: "100%",
                     "& .left": {
-                        display: "flex",
-                        alignItems: "center",
-                        "& svg": {
-                            marginRight: 16,
+                        "& a": {
+                            display: "flex",
+                            alignItems: "center",
+                            textDecoration: "none",
+                            color: "#FFF",
+                            "& svg": {
+                                marginRight: 16,
+                            }
                         }
                     },
                     "& .right": {

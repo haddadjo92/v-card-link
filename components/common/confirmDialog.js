@@ -11,7 +11,7 @@ const useStyles = createUseStyles(ConfirmDialogStyles);
 function ConfirmDialog({ open, title, content, variant = "danger", resolveBtnText = "Ok", rejectBtnText = "Cancel", onClose, onResolve, onReject }) {
     const classes = useStyles();
 
-    // ************* MEMOS *************
+    // ************* Memos *************
     const dialogClasses = useMemo(() => { return { paper: classNames(classes.dialogRoot, variant) } }, [classes.dialogRoot, variant])
 
     return (

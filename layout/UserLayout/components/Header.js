@@ -1,13 +1,12 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { memo, useState, cloneElement, useMemo, useCallback } from 'react'
-import { AppBar, Toolbar, IconButton, Button, Stack, CircularProgress, Typography, useScrollTrigger } from '@mui/material';
+import { AppBar, Toolbar, Button, Stack, CircularProgress, Typography, useScrollTrigger } from '@mui/material';
 // *** Icons ***
 import { useDispatch } from 'react-redux'
 import { logout } from '@/store/reducers/authReducer'
 // *** Icons ***
 import PersonIcon from '@mui/icons-material/Person';
-import MenuIcon from '@mui/icons-material/Menu'
 import LogoutIcon from '@mui/icons-material/Logout';
 
 function ElevationScroll({ children, ...props }) {
@@ -41,9 +40,9 @@ function Header(props) {
                 <Toolbar>
                     <Stack direction="row" justifyContent="space-between" alignItems="center">
                         <div className='left'>
-                            <Link href="/admin">
+                            <Link href="/user">
                                 <PersonIcon />
-                                <Typography>System Admin</Typography>
+                                <Typography>System User</Typography>
                             </Link>
                         </div>
 
@@ -58,10 +57,6 @@ function Header(props) {
                             >
                                 Logout
                             </Button>
-
-                            <IconButton edge="end" color="inherit" aria-label="menu" onClick={props?.onOpenDrawer}>
-                                <MenuIcon />
-                            </IconButton>
                         </div>
 
                     </Stack>

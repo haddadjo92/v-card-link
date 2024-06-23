@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import { wrapper } from '@/store/store';
 // *** Layout ***
 import AdminLayout from '@/layout/AdminLayout'
+import UserLayout from '@/layout/UserLayout'
 import MainLayout from '@/layout/MainLayout'
 // *** styles ***
 import GlobalStyles from '@/assets/styles/global.styles'
@@ -19,7 +20,7 @@ export default function App({ Component, pageProps, ...restAppProps }) {
   useGlobalStyles()
   const { store, props } = wrapper.useWrappedStore(restAppProps);
 
-  const { auth: { isAuthenticated } } = store.getState(state => state.auth)
+  const { auth: { isAuthenticated, session } } = store.getState(state => state.auth)
   const router = props?.router
 
 
@@ -30,21 +31,31 @@ export default function App({ Component, pageProps, ...restAppProps }) {
   }, [router.route])
 
 
+  const isUser = useMemo(() => {
+    const splitPath = router.route.split("/");
+    return splitPath[1] === 'user' || splitPath[2] === 'user'
+  }, [router.route])
+
+
 
   const Layout = useMemo(() => {
-    if (isAdmin && isAuthenticated)
-      return AdminLayout
-    else if (isAdmin && !isAuthenticated) {
+
+    if ((isAdmin || isUser) && !isAuthenticated) {
       if (typeof (window) !== "undefined")
         router.push("/login")
       return Fragment
     }
+    else if (isAdmin)
+      return AdminLayout
+
+    else if (isUser)
+      return UserLayout
     else {
       if (router.route === '/login')
         return Fragment
       else return MainLayout
     }
-  }, [isAdmin, isAuthenticated, router])
+  }, [isAdmin, isUser, isAuthenticated, router])
 
 
   return (
@@ -57,14 +68,6 @@ export default function App({ Component, pageProps, ...restAppProps }) {
           />
           <ToastContainer />
         </Layout>
-        {/* {() => (
-          <Layout>
-            <Component
-              {...pageProps}
-              key={router.pathname}
-            />
-          </Layout>
-        )} */}
       </PersistGate>
     </Provider>
   )
