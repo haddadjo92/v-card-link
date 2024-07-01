@@ -73,7 +73,7 @@ const ImagesUploaderStyles = {
                             display: "-webkit-box",
                             wordWrap: "break-word",
                             "-webkit-box-orient": "vertical",
-                            "-webkit-line-clamp": 3,                            
+                            "-webkit-line-clamp": 3,
                         }
                     },
                     "& .right": {

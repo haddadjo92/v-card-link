@@ -24,9 +24,9 @@ function AdminLayout({ children }) {
 
   // ****************** Side Effects ******************
   useEffect(() => {
-    if (!isAuthenticated || session?.role !== "admin")
+    if (!isAuthenticated || session?.role !== "ADMIN")
       router.push('/login')
-    else if (isAuthenticated && session?.role === "user")
+    else if (isAuthenticated && session?.role === "USER")
       router.push('/user')
   }, [isAuthenticated, session?.role, router])
 

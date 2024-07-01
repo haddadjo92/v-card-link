@@ -1,4 +1,4 @@
-import { borderRadius, transparentize } from 'polished'
+import { transparentize } from 'polished'
 
 
 const CustomizeProfileStyles = {
@@ -15,6 +15,15 @@ const CustomizeProfileStyles = {
                 backgroundColor: "#333"
             },
             "& section.content-section": {
+                "& > .loading-progress": {
+                    height: "calc(100vh - 64px - 74px - 100px)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    "& svg": {
+                        color: "#333!important"
+                    }
+                },
                 "& .MuiFormControl-root": {
                     "& input": {
                         padding: "10px 16px"
@@ -50,7 +59,7 @@ const CustomizeProfileStyles = {
                                 fontSize: 30
                             },
                             "& *": {
-                                pointerEvents: "none"                                
+                                pointerEvents: "none"
                             },
                         }
                     }

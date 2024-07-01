@@ -1,8 +1,23 @@
+import { margin } from "polished"
 
 
 
 const UserManagementDetailStyles = {
     userManagementDetails: {
+        "& .error-fetching-user-profile": {
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "calc(100vh - 64px)",
+            "& h1": {
+                fontSize: 24,
+                marginBottom: 15
+            },
+            "& button": {
+                width: 150
+            }
+        },
         "& > div > .content": {
             paddingTop: 15,
             "& > h1": {

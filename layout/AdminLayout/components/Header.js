@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { memo, useState, cloneElement, useMemo, useCallback } from 'react'
 import { AppBar, Toolbar, IconButton, Button, Stack, CircularProgress, Typography, useScrollTrigger } from '@mui/material';
+// *** api ***
+import axiosClient from '@/api/axiosClient'
 // *** Icons ***
 import { useDispatch } from 'react-redux'
 import { logout } from '@/store/reducers/authReducer'
@@ -23,12 +25,17 @@ function Header(props) {
 
     // ****************** Callbacks ******************
     const handleLogout = useCallback(() => {
-        setLogoutBtnIsLoading(true)
 
-        setTimeout(() => {
-            dispatch(logout())
-            router.push("/login")
-        }, 2000)
+        setLogoutBtnIsLoading(true)
+        axiosClient.delete("/api/auth/logout")
+            .then(res => {
+                dispatch(logout())
+                router.push("/login")
+            })
+            .catch(error => {
+                console.log("error: ", error);
+            })
+            .finally(() => setLogoutBtnIsLoading(false))
     }, [dispatch, router])
 
 

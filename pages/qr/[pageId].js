@@ -2,6 +2,9 @@ import { useMemo } from 'react'
 import { Container } from '@mui/material'
 // *** templates ***
 import Template1 from '@/components/client/templates/template1'
+import Template2 from '@/components/client/templates/template2'
+import Template3 from '@/components/client/templates/template3'
+// import Template1 from '@/components/client/templates/template1'
 // *** styles ***
 import styles from '@/assets/styles/__pages/client/qrPage.styles'
 import { createUseStyles } from 'react-jss'
@@ -16,8 +19,10 @@ export default function TemplatePage(data) {
     return (
         <div className={classes.qrPage}>
             <Container maxWidth={false} sx={containerSX}>
-                <div className='content'>
+                <div className='content'>                    
                     <Template1 {...data} />
+                    {/* <Template2 {...data} /> */}
+                    {/* <Template3 {...data} /> */}
                 </div>
             </Container>
         </div>
@@ -29,7 +34,8 @@ export default function TemplatePage(data) {
 export async function getServerSideProps(ctx) {
 
     const data = {
-        avatar: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
+        // avatar: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg", // template1
+        avatar: "https://thumbs.dreamstime.com/b/young-man-standing-crossed-arms-pose-square-composition-photo-portrait-happy-smiling-face-male-model-blue-background-guy-187062130.jpg",
         fullName: "Mike Jonathan",
         title: "Frontend Developer",
         position: "Senior Frontend Developer",

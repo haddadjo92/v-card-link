@@ -1,4 +1,4 @@
-import { memo, forwardRef, useMemo } from 'react'
+import { memo, forwardRef, useEffect, useMemo, useRef } from 'react'
 // *** styles ***
 import classNames from 'classnames'
 import styles from '@/assets/styles/__components/common/FormFields/CustomFileUpload.styles'
@@ -7,8 +7,9 @@ const useStyles = createUseStyles(styles)
 
 
 
-const CustomFileUpload = forwardRef(({ name, value, disabled, margin, onChange }, ref) => {
+const CustomFileUpload = forwardRef(({ name, value, accept, disabled, margin, onChange }, ref) => {
     const classes = useStyles()
+    const formRef = useRef(null)
 
     // ****************** Memos ******************
     const fileUploadClassNames = useMemo(() => {
@@ -20,12 +21,19 @@ const CustomFileUpload = forwardRef(({ name, value, disabled, margin, onChange }
         })
     }, [classes.fileUpload, margin, value])
 
+    // ****************** Side Effects ******************
+    useEffect(() => {
+        if(!value) {
+            formRef.current.reset()
+        }        
+    }, [value])
+
 
     return (
         <div className={fileUploadClassNames}>
-            <form name={name} value={value} onChange={onChange}>
+            <form ref={formRef} name={name} value={value} onChange={onChange}>
                 <div className="file-upload-wrapper" data-text={value?.name ? value?.name : "Select file"}>
-                    <input ref={ref} name="file-upload-field" type="file" className="file-upload-field" disabled={disabled} />
+                    <input {...(accept) && { accept }} ref={ref} name="file-upload-field" type="file" className="file-upload-field" disabled={disabled} />
                 </div>
             </form>
         </div>

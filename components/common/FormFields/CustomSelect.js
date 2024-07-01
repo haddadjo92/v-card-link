@@ -8,7 +8,7 @@ import styles from '@/assets/styles/__components/common/FormFields/CustomSelect.
 import { createUseStyles } from 'react-jss'
 const useStyles = createUseStyles(styles)
 
-function CustomSelect({ name, value, labelText, placeholder, error, helperText, fullWidth, required, options, endAdornment, margin, onChange }) {
+function CustomSelect({ name, value, labelText, placeholder, error, helperText, fullWidth, required, options, endAdornment, margin, onChange, ...props }) {
     const classes = useStyles()
 
     // ****************** Memos ******************
@@ -69,6 +69,7 @@ function CustomSelect({ name, value, labelText, placeholder, error, helperText, 
                     label={labelText}
                     MenuProps={menuProps}
                     endAdornment={__endAdornment}
+                    {...props}
                 >
                     {options?.map(({ name, value }) => (
                         <MenuItem classes={menuItemClasses} key={value} value={value}>{name}</MenuItem>

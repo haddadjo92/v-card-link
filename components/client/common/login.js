@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect, useCallback, useMemo } from 'react'
+import { setCookie } from "cookies-next";
 import { Alert, Typography } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
+import axios from 'axios'
 // *** redux ***
 import { useSelector, useDispatch } from 'react-redux'
 import { login } from '@/store/reducers/authReducer'
@@ -43,30 +45,31 @@ export default function Login() {
   const loginBtnStartIcon = useMemo(() => <LoginIcon />, [])
 
   // ****************** Callbacks ******************
-  const onSubmit = useCallback(({ username, password }, { setSubmitting }) => {
+  const onSubmit = useCallback(async ({ username, password }, { setSubmitting }) => {
     setSubmitting(true)
 
-    setTimeout(() => {
+    const headers = { 'Content-Type': 'application/json' }
+    const body = {
+      username,
+      password
+    }
 
-      if ((username === "admin" && password === "admin") || (username === "user" && password === "user")) {
-        const session = {
-          id: "nmhaddad",
-          role: username,
-          username,
-          firstName: "System",
-          lastName: username === "admin" ? "Admin" : "User",
-          email: `${username}@example.com`,
-        }
 
-        dispatch(login({ session }))
-        router.push(`/${username}`) // /admin OR /user
-      }
-      else {
-        setError("Invalid username or password.")
+
+    axios.post("/api/auth/login", body, { headers, withCredentials: true })
+      .then((res) => {
+        setCookie("token", res?.data?.token)
+        dispatch(login({ session: res.data?.userInfo }))
+        if (res.data?.userInfo?.role === "ADMIN")
+          router.push("/admin")
+        else if (res.data?.userInfo?.role === "USER")
+          router.push("/user")
+      })
+      .catch((error) => {
+        console.log("error: ", error);
+        setError(error?.message || "Invalid username or password.")
         setSubmitting(false)
-      }
-    }, 2000)
-
+      })
   }, [dispatch, router])
 
 

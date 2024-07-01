@@ -7,7 +7,7 @@ module.exports = (phase) => {
 
   const env = {
     BASE_URL: (() => {
-      if (isDev || isProd || isStaging) return ''
+      if (isDev || isProd || isStaging) return 'http://82.208.22.118:8080/adham/api/v1'
       return 'BASE_URL:not (isDev,isProd && !isStaging,isProd && isStaging)'
     })(),
     ORIGIN: phase === PHASE_PRODUCTION_BUILD ? "" : "http://localhost:3000"

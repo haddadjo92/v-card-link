@@ -1,6 +1,5 @@
 
 
-
 const UserManagementStyles = {
     userManagement: {
         "& > div > .content": {
@@ -29,10 +28,27 @@ const UserManagementStyles = {
                     },
                     "& tbody": {
                         "& tr": {
-                            '&:last-child td, &:last-child th': { 
-                                border: 0 
+                            '&:last-child td, &:last-child th': {
+                                border: 0
                             },
                             "& td": {
+                                "& .no-data": {
+                                    backgroundColor: "#ff9800",
+                                    color: "#fff",
+                                    padding: 5,
+                                    borderRadius: 3,
+                                },
+                                "& .phoneNumber": {
+                                    display: "flex",
+                                    alignItems: "center",
+                                    "& span:nth-child(1)": {
+                                        backgroundColor: "rgba(0, 0, 0, 0.6)",
+                                        color: "#fff",
+                                        padding: 5,
+                                        borderRadius: 3,
+                                        marginRight: 5
+                                    }
+                                },
                                 "&.view-qr-code": {
                                     "& a": {
                                         fontSize: 16,
