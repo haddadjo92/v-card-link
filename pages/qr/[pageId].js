@@ -4,7 +4,7 @@ import { Container } from '@mui/material'
 import Template1 from '@/components/client/templates/template1'
 import Template2 from '@/components/client/templates/template2'
 import Template3 from '@/components/client/templates/template3'
-// import Template1 from '@/components/client/templates/template1'
+import Template4 from '@/components/client/templates/template4'
 // *** styles ***
 import styles from '@/assets/styles/__pages/client/qrPage.styles'
 import { createUseStyles } from 'react-jss'
@@ -19,10 +19,11 @@ export default function TemplatePage(data) {
     return (
         <div className={classes.qrPage}>
             <Container maxWidth={false} sx={containerSX}>
-                <div className='content'>                    
-                    <Template1 {...data} />
+                <div className='content'>
+                    {/* <Template1 {...data} /> */}
                     {/* <Template2 {...data} /> */}
                     {/* <Template3 {...data} /> */}
+                    <Template4 {...data} />
                 </div>
             </Container>
         </div>
@@ -48,7 +49,7 @@ export async function getServerSideProps(ctx) {
         },
         aboutMe: "I'm Mike Jonathan, and I recently graduated with an advanced diploma from Smith secondary school. I'm seeking an internship where I can apply my skills in content creation and increase my experience in digital marketing.",
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-        workingDays: "Monday, Tuesday, Wednesday, Thursday, Friday",        
+        workingDays: "Monday, Tuesday, Wednesday, Thursday, Friday",
         workingHours: {
             from: "8:00am",
             to: "6:00pm"

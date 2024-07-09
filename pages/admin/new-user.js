@@ -78,12 +78,13 @@ export default function NewUser() {
         setSubmitting(true)
         const body = {
             email,
-            phoneRequestDTO: [
-                {
-                    phoneNumber: mobileNumber,
-                    phoneTypeId: phoneType
-                }
-            ],
+            phoneRequestDTO: [],
+            // phoneRequestDTO: [
+            //     {
+            //         phoneNumber: mobileNumber,
+            //         phoneTypeId: phoneType
+            //     }
+            // ],
             firstName,
             middleName,
             lastName,
@@ -123,6 +124,7 @@ export default function NewUser() {
 
             })
             .catch(error => {
+                console.log("error: ", error);
                 toast.error("Fail to create a new user account.")
             })
             .finally(() => setSubmitting(false))

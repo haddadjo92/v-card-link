@@ -29,6 +29,12 @@ const CustomizeProfileStyles = {
                         padding: "10px 16px"
                     }
                 },
+                "& .MuiSelect-select": {
+                    padding: "10px 16px",
+                    "& + input": {
+                        padding: "0px !important",
+                    }
+                },
                 "& .section1, .section2": {
                     "& > div": {
                         "& button": {
@@ -64,6 +70,29 @@ const CustomizeProfileStyles = {
                         }
                     }
                 }
+            },
+            "& section.design-settings": {
+                "& .user-template": {
+                    "& .template-wrapper": {
+                        maxWidth: 350,
+                        height: 550,
+                        overflow: "auto"
+                    },
+                    "& .btn-wrapper": {
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 25,
+                        "& button": {
+                            textTransform: "capitalize",
+                            borderRadius: 60,
+                            fontSize: 16,
+                            borderColor: "#333",
+                            color: "#333"
+                        }
+                    }
+                }
+
             }
         }
     }

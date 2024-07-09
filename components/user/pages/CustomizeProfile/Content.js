@@ -4,6 +4,9 @@ import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 // *** components ***
 import CustomInput from '@/components/common/FormFields/CustomInput'
+import CustomSelect from '@/components/common/FormFields/CustomSelect'
+import CustomAutocompleteTags from '@/components/common/FormFields/CustomAutocompleteTags'
+import CustomButton from '@/components/common/FormFields/CustomButton'
 import ImageUploader from '@/components/common/images-uploader'
 // *** Icons ***
 import VisibilityIcon from '@mui/icons-material/Visibility'
@@ -26,6 +29,16 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 
 
 
+const weekdayOptions = [
+  { title: "Sunday" },
+  { title: "Monday" },
+  { title: "Tuesday" },
+  { title: "Wednesday" },
+  { title: "Thursday" },
+  { title: "Friday" },
+  { title: "Saturday" },
+]
+
 const validationSchema = Yup.object().shape({
   fullName: Yup.string(),
   title: Yup.string(),
@@ -33,6 +46,16 @@ const validationSchema = Yup.object().shape({
   companyName: Yup.string(),
   email: Yup.string().email("Invalid Email Format."),
   mobileNumber: Yup.string(),
+  aboutMe: Yup.string(),
+  description: Yup.string(),
+  addressLine: Yup.string(),
+  locationAddress: Yup.string(),
+  workingDays: Yup.array().of(Yup.object().shape({
+    title: Yup.string()
+  })).max(7),
+  workingHoursFrom: Yup.string(),
+  workingHoursTo: Yup.string(),
+  website: Yup.string(),
 })
 
 const socialLinksData = [
@@ -55,8 +78,59 @@ const socialLinksData = [
 
 
 
-const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId, socialLinks, profilePicture, photoGallery, onClickSocialBtn, onToggleActiveField, onChangeSocialLinks, onChangePhotoGallery, onClickSetProfilePicture, onSubmit }, ref) => {
-  
+const workingHoursOptions = [
+  { name: "00:00am", value: "00:00am" },
+  { name: "00:30am", value: "00:30am" },
+  { name: "01:00am", value: "01:00am" },
+  { name: "01:30am", value: "01:30am" },
+  { name: "02:00am", value: "02:00am" },
+  { name: "02:30am", value: "02:30am" },
+  { name: "03:00am", value: "03:00am" },
+  { name: "03:30am", value: "03:30am" },
+  { name: "04:00am", value: "04:00am" },
+  { name: "04:30am", value: "04:30am" },
+  { name: "05:00am", value: "05:00am" },
+  { name: "05:30am", value: "05:30am" },
+  { name: "06:00am", value: "06:00am" },
+  { name: "06:30am", value: "06:30am" },
+  { name: "07:00am", value: "07:00am" },
+  { name: "07:30am", value: "07:30am" },
+  { name: "08:00am", value: "08:00am" },
+  { name: "08:30am", value: "08:30am" },
+  { name: "09:00am", value: "09:00am" },
+  { name: "09:30am", value: "09:30am" },
+  { name: "10:00am", value: "10:00am" },
+  { name: "10:30am", value: "10:30am" },
+  { name: "11:00am", value: "11:00am" },
+  { name: "11:30am", value: "11:30am" },
+  { name: "00:00pm", value: "00:00pm" },
+  { name: "00:30pm", value: "00:30pm" },
+  { name: "01:00pm", value: "01:00pm" },
+  { name: "01:30pm", value: "01:30pm" },
+  { name: "02:00pm", value: "02:00pm" },
+  { name: "02:30pm", value: "02:30pm" },
+  { name: "03:00pm", value: "03:00pm" },
+  { name: "03:30pm", value: "03:30pm" },
+  { name: "04:00pm", value: "04:00pm" },
+  { name: "04:30pm", value: "04:30pm" },
+  { name: "05:00pm", value: "05:00pm" },
+  { name: "05:30pm", value: "05:30pm" },
+  { name: "06:00pm", value: "06:00pm" },
+  { name: "06:30pm", value: "06:30pm" },
+  { name: "07:00pm", value: "07:00pm" },
+  { name: "07:30pm", value: "07:30pm" },
+  { name: "08:00pm", value: "08:00pm" },
+  { name: "08:30pm", value: "08:30pm" },
+  { name: "09:00pm", value: "09:00pm" },
+  { name: "09:30pm", value: "09:30pm" },
+  { name: "10:00pm", value: "10:00pm" },
+  { name: "10:30pm", value: "10:30pm" },
+  { name: "11:00pm", value: "11:00pm" },
+  { name: "11:30pm", value: "11:30pm" },
+]
+
+
+const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId, socialLinks, profilePicture, photoGallery, onClickSocialBtn, onToggleActiveField, onChangeSocialLinks, onChangePhotoGallery, onClickSetProfilePicture, onWorkingDaysChange, onSubmit }, ref) => {
   return (
     <section className='content-section'>
       {loading ? (
@@ -82,7 +156,7 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
                       {({ field, form, meta: { touched, error } }) => (
                         <CustomInput
                           labelText="Full Name"
-                          placeholder="Full Name"
+                          placeholder="First Middle Last"
                           disabled={isSubmitting || !activeFields.fullName}
                           error={touched && error && error}
                           helperText={touched && error ? error : ""}
@@ -306,16 +380,20 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
                   {/****************** Working Days ******************/}
                   <Stack direction="row" alignItems="center" justifyContent="center">
                     <Field name="workingDays">
-                      {({ field, form, meta: { touched, error } }) => (
-                        <CustomInput
+                      {({ field: { name, value, onChange, onBlur }, form, meta: { touched, error } }) => (
+
+                        <CustomAutocompleteTags
                           labelText="Working Days"
                           placeholder="Working Days"
                           disabled={isSubmitting || !activeFields.workingDays}
                           error={touched && error && error}
                           helperText={touched && error ? error : ""}
                           margin={touched && error ? "dense" : "normal"}
-                          fullWidth
-                          {...field}
+                          value={value}
+                          options={weekdayOptions}
+                          fullWidth                          
+                          onChange={onWorkingDaysChange}
+                          onBlur={onBlur}
                         />
                       )}
                     </Field>
@@ -332,7 +410,8 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
 
                         <Field name="workingHoursFrom">
                           {({ field, form, meta: { touched, error } }) => (
-                            <CustomInput
+                            <CustomSelect
+                              options={workingHoursOptions}
                               labelText="From"
                               placeholder="From"
                               disabled={isSubmitting || !activeFields.workingHours}
@@ -350,7 +429,8 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
 
                         <Field name="workingHoursTo">
                           {({ field, form, meta: { touched, error } }) => (
-                            <CustomInput
+                            <CustomSelect
+                              options={workingHoursOptions}
                               labelText="To"
                               placeholder="To"
                               disabled={isSubmitting || !activeFields.workingHours}
@@ -440,7 +520,13 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
                 </Grid>
               </Grid>
 
-              <button type="submit">Submit</button>
+
+              <CustomButton
+                size="large"
+                type="submit"
+                innerText="Save Changes"
+                loading={isSubmitting}
+              />
             </Form>
           )}
         </Formik>
