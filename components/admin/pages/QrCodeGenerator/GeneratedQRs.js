@@ -1,41 +1,13 @@
 import { memo, useState, useEffect, useCallback } from 'react'
 import _ from 'lodash'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, CircularProgress } from '@mui/material'
+import { toast } from 'react-toastify'
+// *** api ***
+import axiosClient from '@/api/axiosClient'
+// *** redux ***
+import { useSelector } from 'react-redux'
 // *** components ***
 import QRdialog from '@/components/admin/pages/QrCodeGenerator/QRdialog'
-
-const dummyData = [
-    {
-        id: 1,
-        type: "WhatsApp",
-        value: "Whatsapp.me/421?[2658",
-        active: false
-    },
-    {
-        id: 2,
-        type: "WhatsApp",
-        value: "Whatsapp.me/7822658",
-        active: false
-    },
-    {
-        id: 3,
-        type: "URL",
-        value: "http://www.elavo.com",
-        active: false
-    },
-    {
-        id: 4,
-        type: "File",
-        value: "://userlaptop/c/data/ABV",
-        active: false
-    },
-    {
-        id: 5,
-        type: "MobileNumber",
-        value: "+962789562314",
-        active: false
-    },
-]
 
 
 const qrDialogInitialState = { open: false, url: "" }
@@ -46,39 +18,61 @@ function GeneratedQRs() {
     const [qrDialog, setQrDialog] = useState(qrDialogInitialState)
 
 
+    const authState = useSelector(state => state.auth)
+    const userId = authState?.session?.id;
+
     // ****************** Callbacks ******************
-    const handleViewQRCode = useCallback((event) => { setQrDialog({ open: true, url: event.target.getAttribute("data-url") }) }, [])
     const handelCloseQRDialog = useCallback(() => setQrDialog(qrDialogInitialState), [])
+    const handleViewQRCode = useCallback((event) => { setQrDialog({ open: true, url: event.target.getAttribute("data-url") }) }, [])
 
     const toggleActivateQRCode = useCallback((event) => {
         const id = event.target.getAttribute("data-id")
+        const type = event.target.getAttribute("data-type")
         const activeStatus = event.target.getAttribute("data-active-status")
 
-        setTableDate(prevState => {
-            let result = _.map(prevState, (props) => {
 
-                if (String(props?.id) === String(id))
-                    return { ...props, active: activeStatus === "active" ? false : true }
-                return props
+
+        const body = [{
+            // qrId: Number(id),
+            fieldName: type,
+            active: activeStatus === "active" ? false : true
+        }]
+
+        axiosClient.put(`/api/qr-generator/qrCodeActivity?userId=${userId}`, body)
+            .then(res => {
+                toast.success(`QR ${type} was successfully ${activeStatus === "active" ? "Deactivated" : "Activated"}.`)
+
+                setTableDate(prevState => {
+                    let result = _.map(prevState, (props) => {
+                        if (String(props?.id) === String(id))
+                            return { ...props, active: activeStatus === "active" ? false : true }
+                        return props
+                    })
+
+                    return result
+                })
+            })
+            .catch(error => {
+                toast.error(`Fail to ${activeStatus === "active" ? "Deactivate" : "Activate"} `)
             })
 
-            return result
-        })
-
-
-    }, [])
+    }, [userId])
 
 
     // ****************** Side Effects ******************
     useEffect(() => {
 
-        const timeoutId = setTimeout(() => {
-            setLoading(false)
-            setTableDate(dummyData)
-        }, 2000)
-
-        return () => clearTimeout(timeoutId)
-    }, [])
+        axiosClient.get(`/api/qr-generator/retrieveUserQRCode?userId=${userId}`)
+            .then(res => {
+                const tableData = _.map(res?.data, ({ id, fieldName, fieldValue, active }) => ({ id, type: fieldName, value: fieldValue, active }))
+                setTableDate(tableData)
+            })
+            .catch(error => {
+                console.log("error: ", error);
+                toast.error("Fail to fetch generated QR's")
+            })
+            .finally(() => setLoading(false))
+    }, [userId])
 
 
 
@@ -119,13 +113,18 @@ function GeneratedQRs() {
                                 <TableCell>{type}</TableCell>
                                 <TableCell>{value}</TableCell>
                                 <TableCell>
-
                                     <Button
-                                        data-url={type}
-                                        className='view-qr-btn'
+                                        data-url={
+                                            type === "whatsAppNumber" ? `https://wa.me/${value}` :
+                                                type === "mobileNumber" ? `tel:${value}` :
+                                                    type === "email" ? `mailto:${value}` :
+                                                        value
+                                        }
+                                        className='view-qr-btn'                                        
                                         variant='text'
                                         disableRipple
                                         onClick={handleViewQRCode}
+                                        disabled={!active}
                                     >
                                         View
                                     </Button>
@@ -135,6 +134,7 @@ function GeneratedQRs() {
 
                                     <Button
                                         data-id={id}
+                                        data-type={type}
                                         data-active-status={active ? "active" : "inactive"}
                                         variant='contained'
                                         className={`toggle-activate-btn ${active ? "active" : "inactive"}`}

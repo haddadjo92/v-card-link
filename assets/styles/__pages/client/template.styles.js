@@ -1,5 +1,5 @@
 import { Poppins } from 'next/font/google'
-import { lighten, transparentize } from 'polished'
+import { lighten, transparentize, wordWrap } from 'polished'
 // *** assets ***
 import bg1 from '@/assets/images/bg1.jpg'
 
@@ -17,11 +17,14 @@ const commonCardStyles = {
     margin: "24px 24px 0px 24px",
     padding: 15,
     "& h5": {
+        color: theme => theme.primaryColor,
         ...fontPoppins600.style,
-        // textAlign: "center",
-        borderBottom: "1px solid #DDD",
+        borderBottom: theme => `1px solid ${theme.primaryColor}`,
         marginBottom: 10,
         paddingBottom: 5
+    },
+    "& > .description, & > .contact-details, & > .content": {
+        color: theme => theme.secondaryColor,
     }
 }
 
@@ -32,13 +35,14 @@ const commonCard2Styles = {
         fontSize: 22,
         textAlign: "center",
         backgroundColor: "#f1f1f1",
-        color: "#333",
+        color: theme => theme.primaryColor,
         borderRadius: "20px 20px 0px 0px",
         padding: 15,
         marginBottom: 3
     },
     "& > .description, & > .contact-details, & > .content": {
         backgroundColor: "#FFF",
+        color: theme => theme.secondaryColor,
         padding: 15,
         borderRadius: "0px 0px 20px 20px",
     }
@@ -53,9 +57,9 @@ const commonCard3Styles = {
         position: "relative",
         letterSpacing: 1,
         "& span": {
-            backgroundColor: "#2A2A2A",
+            backgroundColor: theme => theme.iconColor,
             display: "inline-block",
-            color: "#fff",
+            color: theme => theme.primaryColor,
             padding: "5px 10px",
             borderRadius: "6px 6px 0px 0px"
         },
@@ -66,13 +70,13 @@ const commonCard3Styles = {
             left: 0,
             width: "100%",
             height: 1,
-            backgroundColor: "#b1b1b1",
+            backgroundColor: theme => theme.iconColor,
         }
     },
     "& .description": {
         ...fontPoppins400.style,
         fontSize: 16,
-        color: "#6C6C6C",
+        color: theme => theme.secondaryColor,
         letterSpacing: -.5,
         lineHeight: "30px"
     }
@@ -83,12 +87,13 @@ const commonCard4Styles = {
     "& h5": {
         ...fontPoppins600.style,
         fontSize: 24,
-        color: "#2A2A2A",
+        color: theme => theme.primaryColor,
         position: "relative",
         paddingLeft: 40,
         marginBottom: 10,
         paddingBottom: 10,
-        borderBottom: "1px solid #e3e3e3",
+        // borderBottom: "1px solid #e3e3e3",
+        borderBottom: theme => `1px solid ${theme.iconColor}`,
         "&:before": {
             content: "''",
             position: "absolute",
@@ -97,7 +102,7 @@ const commonCard4Styles = {
             width: 25,
             height: 25,
             borderRadius: 4,
-            backgroundColor: "#e3e3e3",
+            backgroundColor: theme => theme.iconColor,
             transform: "rotate(45deg)",
             zIndex: 1
         },
@@ -105,7 +110,7 @@ const commonCard4Styles = {
     "& > .description, & > .contact-details, & > .content": {
         ...fontPoppins400.style,
         fontSize: 16,
-        color: "#6C6C6C",
+        color: theme => theme.secondaryColor,
         letterSpacing: -.5,
         lineHeight: "30px"
     }
@@ -116,9 +121,9 @@ const commonLinkWithIconAndTextStyles = {
     display: "flex",
     alignItems: "center",
     fontSize: 15,
-    color: "#000",
+    color: theme => theme.secondaryColor,
     "& .icon-wrapper": {
-        backgroundColor: "#111",
+        backgroundColor: theme => theme.iconColor,
         width: 35,
         height: 35,
         borderRadius: "50%",
@@ -128,7 +133,7 @@ const commonLinkWithIconAndTextStyles = {
         marginRight: 15,
         "& svg": {
             fontSize: 20,
-            color: "#FFF"
+            color: theme => theme.secondaryColor
         }
     }
 }
@@ -154,7 +159,7 @@ const commonFollowMeStyles = {
                 textDecoration: "none",
                 borderRadius: 8,
                 marginBottom: 25,
-                backgroundColor: "#eee",
+                backgroundColor: theme => theme.iconColor,
                 "& svg": {
                     fill: transparentize(.5, "#000"),
                     color: transparentize(.5, "#000"),
@@ -162,13 +167,21 @@ const commonFollowMeStyles = {
                     fontSize: 30
                 },
                 "&:hover": {
-                    backgroundColor: "#333",
+                    backgroundColor: theme => theme.iconColor,
                     "& svg": {
-                        fill: "#fff !important",
-                        color: "#fff !important"
+                        fill: theme => `${theme.primaryColor} !important`,
+                        color: theme => `${theme.primaryColor} !important`
                     }
                 }
-            }
+            },
+            "@media (max-width: 422px)": {
+                flex: "0 0 25%",
+                maxWidth: "25%",
+            },
+            "@media (max-width: 350px)": {
+                flex: "0 0 33.333333333%",
+                maxWidth: "33.333333333%",
+            },
         }
     }
 }
@@ -185,7 +198,7 @@ const nextImageFillModeStyles = {
 // ************************* Template 1 *************************
 export const Template1Styles = {
     template1: {
-        backgroundColor: "#111",
+        backgroundColor: "#000",
         paddingBottom: 24,
         "& section.hero-section": {
             backgroundSize: "cover",
@@ -213,6 +226,18 @@ export const Template1Styles = {
                 "& h1.fullName": {
                     ...fontPoppins600.style,
                     fontSize: 72,
+                    "@media(max-width: 768px)": {
+                        fontSize: 64,
+                    },
+                    "@media(max-width: 540px)": {
+                        fontSize: 54,
+                    },
+                    "@media(max-width: 450px)": {
+                        fontSize: 48,
+                    },
+                    "@media(max-width: 390px)": {
+                        fontSize: 35,
+                    },
                 },
                 "& p.title, & p.position": {
                     ...fontPoppins400.style,
@@ -238,7 +263,6 @@ export const Template1Styles = {
                 padding: "15px 5px 0px 5px",
                 "& > a": {
                     textDecoration: "none",
-                    color: "#000",
                     "&:hover": {
                         "& span": {
                             textDecoration: "underline",
@@ -247,6 +271,7 @@ export const Template1Styles = {
                 },
                 "& > a, & > span": {
                     ...commonLinkWithIconAndTextStyles,
+                    color: theme => theme.secondaryColor,
                     marginBottom: 15,
                 }
             }
@@ -278,11 +303,11 @@ export const Template1Styles = {
                 "& h6.sub-title": {
                     ...fontPoppins600.style,
                     fontSize: 16,
-                    backgroundColor: lighten(.2, "#111"),
+                    backgroundColor: theme => theme.primaryColor,
                     display: "inline-block",
                     padding: "5px 10px",
                     borderRadius: 120,
-                    color: "#FFF",
+                    color: "#fff",
                     marginBottom: 10
                 }
             },
@@ -294,7 +319,7 @@ export const Template1Styles = {
                     alignItems: "center",
                     paddingBottom: 10,
                     "& span": {
-                        backgroundColor: '#777',
+                        backgroundColor: theme => theme.secondaryColor,
                         padding: "5px 10px",
                         borderRadius: 120,
                         color: "#FFF",
@@ -306,6 +331,7 @@ export const Template1Styles = {
                 "& .content": {
                     display: "flex",
                     alignItems: "center",
+                    color: theme => theme.secondaryColor,
                     "& .working-hours-from, .working-hours-to": {
                         ...fontPoppins500.style,
                         fontSize: 22
@@ -351,7 +377,11 @@ export const Template2Styles = {
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
                 border: "10px solid #FFF",
-                marginBottom: 25
+                marginBottom: 25,
+                "@media (max-width: 512px)": {
+                    width: 250,
+                    height: 250,
+                }
             },
             "& .person-details": {
                 "& h1.fullName": {
@@ -374,7 +404,7 @@ export const Template2Styles = {
                         width: 20,
                         height: 20,
                         borderRadius: "50%",
-                        backgroundColor: "#ffea00"
+                        backgroundColor: theme => theme.primaryColor
                     }
                 },
                 "& .title": {
@@ -385,7 +415,23 @@ export const Template2Styles = {
                 },
                 "& .companyName": {
 
-                }
+                },
+                "@media (max-width: 512px)": {
+                    "& h1.fullName": {
+                        fontSize: 48,
+                    },
+                    "& .title, .position, .companyName": {
+                        fontSize: 18,
+                    }
+                },
+                "@media (max-width: 410px)": {
+                    "& h1.fullName": {
+                        fontSize: 42,
+                    },
+                    "& .title, .position, .companyName": {
+                        fontSize: 16,
+                    }
+                },
             }
         },
         "& section.about-me": {
@@ -438,7 +484,7 @@ export const Template2Styles = {
             "& .content": {
                 "& h6.sub-title": {
                     ...fontPoppins500.style,
-                    marginBottom: 15
+                    marginBottom: 15,
                 },
                 "& .working-days": {
                     marginBottom: 24,
@@ -447,12 +493,15 @@ export const Template2Styles = {
                     },
                     "& span": {
                         ...fontPoppins400.style,
-                        backgroundColor: "#EEE",
                         padding: "5px 10px",
+                        display: "inline-block",
                         borderRadius: 60,
                         fontSize: 14,
+                        backgroundColor: theme => theme.iconColor,
+                        color: theme => theme.primaryColor,
+                        marginTop: 2,
                         "&:not(:last-child)": {
-                            marginRight: 15
+                            marginRight: 15,
                         }
                     }
                 },
@@ -468,7 +517,7 @@ export const Template2Styles = {
                                     marginRight: 5
                                 },
                                 "&:nth-child(2)": {
-                                    border: "1px solid #333",
+                                    border: theme => `1px solid ${theme.iconColor}`,
                                     padding: "5px 10px",
                                     borderRadius: 120,
                                     fontSize: 14,
@@ -479,7 +528,7 @@ export const Template2Styles = {
                             margin: "0 10px",
                             width: 35,
                             height: 35,
-                            backgroundColor: "#333",
+                            backgroundColor: theme => theme.iconColor,
                             borderRadius: "50%",
                             display: "flex",
                             justifyContent: "center",
@@ -488,6 +537,38 @@ export const Template2Styles = {
                                 color: "#FFF"
                             }
                         },
+                        "@media(max-width: 422px)": {
+                            "& .working-hours-from, & .working-hours-to": {
+                                "& span": {
+                                    "&:nth-child(1)": {
+                                        fontSize: 18
+                                    }
+                                }
+                            },
+                            "& .icon-wrapper": {
+                                width: 30,
+                                height: 30,
+                            }
+                        },
+                        "@media(max-width: 415px)": {
+                            "& > div:first-child, & > div:last-child": {
+                                flex: "0 0 45%",
+                                maxWidth: "45%",
+                                "& span:nth-child(1)": {
+                                    display: "block"
+                                }
+                            },
+                            "& > div:last-child": {
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "flex-end",
+                            },
+                            "& > div:nth-child(2)": {
+                                flex: "0 0 10%",
+                                maxWidth: "10%",
+                                margin: 0
+                            }
+                        }
                     }
                 }
             }
@@ -530,7 +611,7 @@ export const Template3Styles = {
                     height: 300,
                 },
                 "&:before": {
-                    backgroundColor: "#e0e0ff",
+                    backgroundColor: theme => theme.iconColor,
                     top: "-80px",
                     left: -50,
                     transform: "skewY(5deg)",
@@ -556,11 +637,30 @@ export const Template3Styles = {
                         ...fontPoppins700.style,
                         fontSize: 48,
                         color: "#2A2A2A",
+                        wordWrap: "break-word",
+                        "@media (max-width: 546px)": {
+                            fontSize: 38
+                        },
+                        "@media (max-width: 466px)": {
+                            fontSize: 36
+                        },
+                        "@media (max-width: 442px)": {
+                            fontSize: 32
+                        },
                     },
                     "& .title": {
                         ...fontPoppins500.style,
                         fontSize: 22,
-                        color: "#4C4C4C",
+                        color: "#4C4C4C",             
+                        "@media (max-width: 546px)": {
+                            fontSize: 20
+                        },
+                        "@media (max-width: 466px)": {
+                            fontSize: 18
+                        },
+                        "@media (max-width: 442px)": {
+                            fontSize: 16
+                        }
                     },
                     "& .position": {
                         ...fontPoppins400.style,
@@ -571,8 +671,35 @@ export const Template3Styles = {
                         ...fontPoppins400.style,
                         fontSize: 18,
                         color: "#8C8C8C",
+                    },
+                    "& .position, .companyName": {
+                        "@media (max-width: 546px)": {
+                            fontSize: 16
+                        },
+                        "@media (max-width: 466px)": {
+                            fontSize: 14
+                        },
+                        // "@media (max-width: 442px)": {
+                        //     fontSize: 16
+                        // }
                     }
-                }
+                },
+                "@media (max-width: 732px)": {
+                    flexDirection: "column",
+                    "& .avatar": {
+                        flex: "0 0 50%",
+                        maxWidth: "100%",
+                        width: "100%",
+                        borderRadius: "20px 20px 0px 0px",
+                        backgroundPosition: "top",
+                    },
+                    "& .person-details": {
+                        flex: "0 0 50%",
+                        maxWidth: "100%",
+                        width: "100%",
+                        borderRadius: "0px 0px 20px 20px",
+                    }
+                },
             }
         },
         "& section.about-me": {
@@ -597,12 +724,12 @@ export const Template3Styles = {
                     "& .icon-wrapper": {
                         marginRight: 10,
                         "& svg": {
-                            color: "#2A2A2A",
+                            color: theme => theme.iconColor,
                             verticalAlign: "middle"
                         }
                     },
                     "& span": {
-                        color: "#6C6C6C",
+                        color: theme => theme.secondaryColor,
 
                     },
                 }
@@ -627,10 +754,11 @@ export const Template3Styles = {
                     display: "inline-flex",
                     alignItems: "center",
                     textDecoration: "none",
-                    color: "#2A2A2A",
+                    color: theme => theme.primaryColor,
                     "& .icon-wrapper": {
                         marginRight: 10,
                         "& svg": {
+                            color: theme => theme.iconColor,
                             fontSize: 25
                         }
                     },
@@ -646,11 +774,12 @@ export const Template3Styles = {
                 "& h6.sub-title": {
                     ...fontPoppins600.style,
                     fontSize: 16,
-                    backgroundColor: lighten(.2, "#bbb"),
+                    // backgroundColor: lighten(.2, "#bbb"),
+                    backgroundColor: theme => theme.iconColor,
                     display: "inline-block",
                     padding: "2.5px 10px",
                     borderRadius: 120,
-                    color: "#333",
+                    color: theme => theme.primaryColor,
                     marginBottom: 10
                 }
             },
@@ -665,11 +794,11 @@ export const Template3Styles = {
                     "& span": {
                         ...fontPoppins400.style,
                         fontSize: 14,
-                        backgroundColor: '#eee',
-                        border: "1px solid #aaa",
+                        backgroundColor: theme => theme.secondaryColor,
+                        border: theme => `1px solid ${theme.iconColor}`,
                         padding: "5px 10px",
                         borderRadius: 120,
-                        color: "#666",
+                        color: "#fff",
                         marginRight: 10
                     }
                 }
@@ -680,11 +809,13 @@ export const Template3Styles = {
                     alignItems: "center",
                     "& .working-hours-from, .working-hours-to": {
                         ...fontPoppins500.style,
-                        fontSize: 18
+                        fontSize: 18,
+                        color: theme => theme.secondaryColor
                     },
                     "& .icon-wrapper": {
                         padding: "0px 5px",
                         "& svg": {
+                            color: theme => theme.iconColor,
                             fontSize: 30
                         }
                     },
@@ -741,15 +872,20 @@ export const Template4Styles = {
                                 "& img": {
                                     width: "100%",
                                     height: "auto"
-                                }
+                                },                                
                             }
+                        },
+                        "@media(max-width: 640px)": {
+                            minWidth: 250,
                         }
                     },
                     "& .right": {
                         "& .person-details": {
+                            maxWidth: 391.547,
+                            overflow: "hidden",
                             "& h1.fullName": {
                                 ...fontPoppins700.style,
-                                fontSize: 48,
+                                fontSize: 37,
                             },
                             "& .title": {
                                 ...fontPoppins400.style,
@@ -763,8 +899,14 @@ export const Template4Styles = {
                                 ...fontPoppins400.style,
                                 fontSize: 16,
                             },
+                            "@media(max-width: 711px)": {
+                                marginTop: 50
+                            }
                         }
                     },
+                    "@media(max-width: 640px)": {
+                        flexDirection: "column"
+                    }
                 },
                 "&:before, &:after": {
                     content: "''",
@@ -776,15 +918,51 @@ export const Template4Styles = {
                 },
                 "&:before": {
                     top: "25%",
-                    left: "calc(25% + 50px)",                                        
+                    left: "calc(25% + 50px)",
                     backgroundColor: "#dbdbdb",
                     zIndex: 1
                 },
                 "&:after": {
                     top: "25%",
-                    left: "calc(25% + 200px)",                    
+                    left: "calc(25% + 200px)",
                     transform: "rotate(45deg)",
                     backgroundColor: "#e9e9e9",
+                },
+                "@media(max-width: 711px)": {
+                    "&:before": {
+                        left: "calc(25% + 25px)",
+                    },
+                    "&:after": {
+                        left: "calc(25% + 150px)",
+                    }
+                },
+                "@media(max-width: 640px)": {
+                    "&:before, &:after": {                        
+                        width: 100,
+                        height: 100,
+                    },
+                    "&:before": {
+                        top: "calc(25% + 25px)",
+                        left: 50,
+                    },
+                    "&:after": {   
+                        top: "calc(25% + 25px)",                        
+                        right: "60%",
+                    } 
+                },
+                "@media(max-width: 410px)": {
+                    "&:before, &:after": {                        
+                        width: 50,
+                        height: 50,
+                    },
+                    "&:before": {
+                        top: "calc(25% + 12.5px)",
+                        left: 25,
+                    },
+                    "&:after": {   
+                        top: "calc(25% + 12.5px)",                        
+                        right: "100%",
+                    } 
                 },
             }
         },
@@ -840,7 +1018,7 @@ export const Template4Styles = {
                 "& h6.sub-title": {
                     ...fontPoppins600.style,
                     fontSize: 16,
-                    backgroundColor: lighten(.2, "#bbb"),
+                    backgroundColor: theme => lighten(.2, theme.iconColor),
                     display: "inline-block",
                     padding: "2.5px 10px",
                     borderRadius: 120,
@@ -859,10 +1037,10 @@ export const Template4Styles = {
                     "& span": {
                         ...fontPoppins400.style,
                         fontSize: 14,
-                        backgroundColor: '#eee',
+                        backgroundColor: theme => theme.iconColor,
+                        color: theme => theme.secondaryColorColor,
                         padding: "5px 10px",
                         borderRadius: 120,
-                        color: "#666",
                         marginRight: 10
                     }
                 }
@@ -878,7 +1056,8 @@ export const Template4Styles = {
                     "& .icon-wrapper": {
                         padding: "0px 5px",
                         "& svg": {
-                            fontSize: 30
+                            fontSize: 30,
+                            color: theme => theme.iconColor
                         }
                     },
                 }

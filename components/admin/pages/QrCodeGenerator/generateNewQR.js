@@ -1,6 +1,9 @@
 import { Stack, Typography, Button } from '@mui/material'
 import { memo, useState, useCallback } from 'react'
 import { toast } from 'react-toastify';
+import axios from 'axios'
+// *** redux ***
+import { useSelector } from 'react-redux'
 // *** Components ***
 import CustomInput from '@/components/common/FormFields/CustomInput'
 import CustomFileUpload from '@/components/common/FormFields/CustomFileUpload'
@@ -61,26 +64,27 @@ const valuesInitialState = {
   url: ""
 }
 
+const generateQRInitialState = {
+  whatsAppNumber: false,
+  file: false,
+  mobileNumber: false,
+  url: false
+}
+
 GenerateQrCodeItem.displayName = "GenerateQrCodeItem"
 function GenerateNewQRTab() {
   const [values, setValues] = useState(valuesInitialState)
-  const [generateQR, setGenerateQR] = useState({
-    whatsAppNumber: false,
-    file: false,
-    mobileNumber: false,
-    url: false
-  })
+  const [generateQR, setGenerateQR] = useState(generateQRInitialState)
 
+  const authState = useSelector(state => state.auth)
+  const userId = authState?.session?.id;
 
   // ****************** Callbacks ******************
   const handleChange = useCallback((event) => {
 
     setValues(prevState => {
 
-      if (event.target.name === "file-upload-field") return {
-        ...prevState,
-        "file": event.target.files[0]
-      }
+      if (event.target.name === "file-upload-field") return { ...prevState, "file": event.target.files[0] }
 
       return {
         ...prevState,
@@ -93,29 +97,40 @@ function GenerateNewQRTab() {
   const handleGenerateQR = useCallback((event) => {
     const name = event.target.getAttribute("data-name")
     const title = event.target.getAttribute("data-title")
-    setGenerateQR(prevState => {
-      return {
-        ...prevState,
-        [name]: true
-      }
-    })
+    const value = values[name]
 
-    const resolveAfter3Sec = new Promise(resolve => setTimeout(resolve, 3000));
-    toast.promise(resolveAfter3Sec, {
+    setGenerateQR(prevState => ({ ...prevState, [name]: true }))
+
+    let promise;
+    if (name === "file") {
+      
+      const headers = { "Content-type": "multipart/form-data" }
+      const formData = new FormData()      
+
+      formData.append("file", values.file)
+      promise = axios.post(`/api/qr-generator/updateQRCodeFile?userId=${userId}`, formData, { headers })
+    }
+    else {
+      promise = axios.post(`/api/qr-generator/createQRCode?userId=${userId}`, { userId: Number(userId), fieldName: name, fieldValue: value })
+    }
+
+    // const resolveAfter3Sec = new Promise(resolve => setTimeout(resolve, 3000));    
+
+
+    toast.promise(promise, {
       pending: `Generating QR for ${title}`,
       success: `QR for ${title} was successfully generated ✅`,
       error: `Fail to generate QR for ${title} ⛔️`,
     }, { position: "bottom-left", theme: "dark" })
-      .finally(() => {
-        setGenerateQR(prevState => {
-          return {
-            ...prevState,
-            [name]: false
-          }
-        })
-      })
+      .finally(() => setGenerateQR(prevState => ({ ...prevState, [name]: false })))
 
-  }, [])
+    promise.then(() => setValues(prevState => ({ ...prevState, [name]: "" })))
+
+    promise.catch(error => {
+      console.log("error: ", error);
+    })
+
+  }, [userId, values])
 
 
 

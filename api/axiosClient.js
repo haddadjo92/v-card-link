@@ -1,13 +1,10 @@
-// import { getCookie } from 'cookies-next'
 import axios from 'axios';
 import { store } from '../store/store';
 import { logout } from '../store/reducers/authReducer';
 
 
-// const token = getCookie("token")
 const axiosClient = axios.create({
-    withCredentials: true,
-    // headers: { Cookie: token }
+    withCredentials: true    
 });
 
 

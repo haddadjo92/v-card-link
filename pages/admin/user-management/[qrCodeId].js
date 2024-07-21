@@ -21,7 +21,6 @@ export default function UserManagementDetails({ errorFetchingUserProfile, errorF
     const classes = useStyles()
     const router = useRouter()
 
-
     // ****************** Callbacks ******************
     const handleBack = useCallback(() => { router.back() }, [router])
 
@@ -85,17 +84,6 @@ export default function UserManagementDetails({ errorFetchingUserProfile, errorF
                                             readOnly
                                         />
 
-
-                                        {/* <CustomInput
-                                            labelText="Mobile Number"
-                                            placeholder="Mobile Number"
-                                            margin="normal"
-                                            value={phones?.[0]?.phoneNumber}
-                                            fullWidth
-                                            readOnly
-                                        /> */}
-
-
                                         <Grid container spacing={2}>
                                             <Grid item md={4}>
                                                 <CustomSelect
@@ -103,7 +91,7 @@ export default function UserManagementDetails({ errorFetchingUserProfile, errorF
                                                     placeholder="Phone Type"
                                                     margin="normal"
                                                     fullWidth
-                                                    value={phones?.[0]?.phoneType?.type}
+                                                    value={phones?.[0]?.phoneType?.id}
                                                     options={phoneTypeOptions}
                                                     readOnly
                                                 />

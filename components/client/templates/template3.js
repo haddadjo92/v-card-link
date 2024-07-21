@@ -15,8 +15,8 @@ import { Template3Styles } from '@/assets/styles/__pages/client/template.styles'
 import { createUseStyles } from 'react-jss'
 const useStyles = createUseStyles(Template3Styles)
 
-export default function Template3({ avatar, fullName, title, position, companyName, contact, aboutMe, description, workingDays, workingHours, website, socialLinks, photoGallery }) {
-    const classes = useStyles()
+export default function Template3({ avatar, fullName, title, position, companyName, contact, aboutMe, description, workingDays, workingHours, website, socialLinks, photoGallery, templateDesign }) {
+    const classes = useStyles(templateDesign)
 
     // ********************* Memos *********************
     const __workingDays = useMemo(() => {

@@ -88,7 +88,36 @@ const CustomizeProfileStyles = {
                             borderRadius: 60,
                             fontSize: 16,
                             borderColor: "#333",
-                            color: "#333"
+                            color: "#333",
+                            "& *": {
+                                pointerEvents: "none"
+                            },                         
+                            "&.selected": {
+                                "&, &:hover": {
+                                    backgroundColor: "#333",
+                                    color: "#fff"
+                                }
+                            }
+                        }
+                    }
+                },
+                "& .template-theme-colors": {
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "50px 0px 50px 0px",
+                    "& > div": {
+                        flex: "0 0 33.333333333%",
+                        display: "flex",
+                        justifyContent: "center",
+                        "& > div": {
+                            display: "flex",
+                            flexDirection: "column",
+                            "& h5": {
+                                fontSize: 16,
+                                marginBottom: 10,
+                                fontWeight: 600
+                            }
                         }
                     }
                 }

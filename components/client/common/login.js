@@ -54,8 +54,6 @@ export default function Login() {
       password
     }
 
-
-
     axios.post("/api/auth/login", body, { headers, withCredentials: true })
       .then((res) => {
         setCookie("token", res?.data?.token)

@@ -1,5 +1,10 @@
 import { useState, useCallback, useMemo } from 'react'
 import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Grid, Fade, Box, CircularProgress } from '@mui/material'
+import dayjs from 'dayjs'
+import { toast } from 'react-toastify'
+import _ from 'lodash'
+// *** api ***
+import axiosClient from '@/api/axiosClient'
 // *** components ***
 import CustomSelect from '@/components/common/FormFields/CustomSelect'
 import CustomDatePicker from '@/components/common/FormFields/CustomDatePicker'
@@ -19,12 +24,12 @@ const reportOptions = [
 ]
 
 
-const userOptions = [
-  { name: "Username1", value: "username1" },
-  { name: "Username2", value: "username2" },
-  { name: "Username3", value: "username3" },
-  { name: "Username4", value: "username4" },
-]
+// const userOptions = [
+//   { name: "Username1", value: "username1" },
+//   { name: "Username2", value: "username2" },
+//   { name: "Username3", value: "username3" },
+//   { name: "Username4", value: "username4" },
+// ]
 
 
 
@@ -51,6 +56,7 @@ export default function Reports() {
   const classes = useStyles()
   const [reportType, setReportType] = useState("")
   const [loading, setLoading] = useState(false)
+  const [userOptions, setUserOptions] = useState([])
   const [selectedUser, setSelectedUser] = useState("")
   const [fromVisitorsDate, setFromVisitorsDate] = useState("")
   const [toVisitorsDate, setToVisitorsDate] = useState("")
@@ -58,6 +64,7 @@ export default function Reports() {
   const [toUsersDate, setToUsersDate] = useState("")
   const [tableDate, setTableDate] = useState([])
   const [tableIsVisible, setTableIsVisible] = useState(false)
+
 
 
 
@@ -71,6 +78,21 @@ export default function Reports() {
 
   const handleReportSelectChange = useCallback((event) => {
 
+
+
+    if (event.target.value === "numOfVisitors") {
+      axiosClient.get("/api/management/getAllUsers")
+        .then(res => {
+
+          const options = _.map(res.data, ({ id, firstName, middle, lastName }) => ({ name: `${firstName || ""} ${middle || ""} ${lastName || ""}`, value: id }))
+          setUserOptions(options)
+        })
+        .catch(error => {
+          console.log("error: ", error);
+          toast.error("Fail to fetch users.")
+        })
+    }
+
     setReportType(event.target.value)
     setTableDate([])
     setTableIsVisible(false)
@@ -81,19 +103,54 @@ export default function Reports() {
 
     setLoading(true)
 
-    setTimeout(() => {
-
-      if (reportType === "numOfVisitors")
-        setTableDate([{ id: 1, username: "Username2", fromDate: "06/05/2024", toDate: "30/05/2024", numOfProfileVisitors: "17" }])
-      else setTableDate([{ id: 1, fromDate: "20/06/2022", toDate: "10/04/2023", numOfUsers: "17" }])
-
-      setLoading(false)
-      setTableIsVisible(true)
-    }, 2000)
 
 
+    if (reportType === "numOfUsers") {
+      const startDate = dayjs(fromUsersDate).format("YYYY-MM-DD") + "T00:00:00.0000";
+      const endDate = dayjs(toUsersDate).format("YYYY-MM-DD") + "T00:00:00.0000"
 
-  }, [reportType])
+      axiosClient.get("/api/report-controller/getProfile", { params: { startDate, endDate } })
+        .then(res => {
+          setTableIsVisible(true)
+          setTableDate([
+            {
+              id: 1,
+              username: "",
+              fromDate: dayjs(fromUsersDate).format("YYYY-MM-DD"),
+              toDate: dayjs(toUsersDate).format("YYYY-MM-DD"),
+              numOfUsers: res.data
+            }
+          ])
+
+        })
+        .catch(error => {
+          console.log("error: ", error);
+          toast.error("Fail to fetch users report.")
+        })
+        .finally(() => setLoading(false))
+    }
+    else {
+      const startDate = dayjs(fromVisitorsDate).format("YYYY-MM-DD") + "T00:00:00.0000";
+      const endDate = dayjs(toVisitorsDate).format("YYYY-MM-DD") + "T00:00:00.0000"
+
+      axiosClient.get("/api/report-controller/getNumberOfVisitor", { params: { userId: selectedUser, startDate, endDate } })
+        .then(res => {
+          
+          setTableIsVisible(true)
+          setTableDate([{
+            id: 1,
+            fromDate: dayjs(fromUsersDate).format("YYYY-MM-DD"),
+            toDate: dayjs(toUsersDate).format("YYYY-MM-DD"),
+            numOfProfileVisitors: res.data
+          }])          
+        })
+        .catch(error => {
+          console.log("error: ", error);
+          toast.error("Fail to fetch visitors report.")
+        })
+        .finally(() => setLoading(false))
+    }
+  }, [reportType, fromUsersDate, toUsersDate, fromVisitorsDate, toVisitorsDate, selectedUser])
 
 
 

@@ -14,7 +14,7 @@ const apiLogin = async (req, res) => {
             return res.status(200).json({ userInfo: apiData, token: apiHeaders?.["set-cookie"][0] });
         }
         catch (error) {
-            res.status(error?.response?.status).json({ error: error?.message })
+            return res.status(500).json({ error: error?.message })
         }
     }
 }

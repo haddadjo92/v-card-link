@@ -2,9 +2,12 @@ import dynamic from 'next/dynamic'
 import { memo } from 'react'
 import { Fade, Typography, Grid, Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, IconButton } from '@mui/material'
 import { QRCode } from 'react-qrcode-logo';
+// *** redux ***
+import { useSelector } from 'react-redux'
 // *** components ***
 import CustomInput from '@/components/common/FormFields/CustomInput'
 import CustomFileUpload from '@/components/common/FormFields/CustomFileUpload'
+import CustomButton from '@/components/common/FormFields/CustomButton'
 // *** dynamic imports ***
 const ChromeColorPicker = dynamic(() => import('@uiw/react-color').then(({ Chrome }) => Chrome), { ssr: false })
 // *** Icons ***
@@ -15,8 +18,11 @@ import { createUseStyles } from 'react-jss'
 const useStyles = createUseStyles(styles)
 
 
-function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColorChange, onQrImageDimensionsChange, onQRImageChange, onRemoveQRImage }) {
+function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColorChange, onQrImageDimensionsChange, onQRImageChange, onRemoveQRImage, onSaveQRCodeTab }) {
   const classes = useStyles()
+  
+  const authState = useSelector(state => state.auth)
+  const userId = authState?.session?.id;
 
   return (
     <section className={classes.customizeQR}>
@@ -32,7 +38,7 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
                 <div className='content'>
                   <div className='qr-top-lines' />
                   <QRCode
-                    value="http://www.google.com"
+                    value={`${window.location.origin}/qr/${userId}`}
                     logoImage={qrImage}
                     logoWidth={qrImageDimensions.width}
                     logoHeight={qrImageDimensions.height}
@@ -68,7 +74,7 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
                 />
               </div>
 
-              <br />              
+              <br />
 
 
               <Fade in={!!qrImageFile} timeout={500}>
@@ -104,7 +110,7 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
                         </Grid>
                       </div>
 
-                      <br />                      
+                      <br />
                     </>
                   )}
 
@@ -142,11 +148,26 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
                 </div>
               </Fade>
 
-
             </section>
-
           </Grid>
         </Grid>
+
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        
+        <CustomButton
+          size="large"
+          type="submit"
+          innerText="Save Changes"
+          onClick={onSaveQRCodeTab}
+        // loading={isSubmitting}
+        />
+
+
       </div>
     </section>
   )

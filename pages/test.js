@@ -20,13 +20,6 @@ export default function Test() {
     const handleChange = useCallback((event, newValue) => setValue(newValue), [])
 
 
-    useEffect(() => {
-
-        console.log("value: ", value);
-
-    }, [value])
-
-
     return (
         <Container>
             <div style={{ padding: "50px 0px" }}>

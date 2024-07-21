@@ -88,6 +88,10 @@ const QrCodeGeneratorStyles = {
                                 border: 0
                             },
                             "& td": {
+                                whiteSpace: "nowrap",
+                                maxWidth: 250,
+                                textOverflow: "ellipsis",
+                                overflow: "hidden",
                                 "& .loading-wrapper": {
                                     display: "flex",
                                     justifyContent: "center",

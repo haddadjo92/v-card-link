@@ -130,7 +130,7 @@ const workingHoursOptions = [
 ]
 
 
-const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId, socialLinks, profilePicture, photoGallery, onClickSocialBtn, onToggleActiveField, onChangeSocialLinks, onChangePhotoGallery, onClickSetProfilePicture, onWorkingDaysChange, onSubmit }, ref) => {
+const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId, socialLinks, profilePicture, photoGallery, onClickSocialBtn, onToggleActiveField, onChangeSocialLinks, onChangePhotoGallery, onChangeProfilePicture, onWorkingDaysChange, onDeleteImage, onSubmit }, ref) => {
   return (
     <section className='content-section'>
       {loading ? (
@@ -389,9 +389,9 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
                           error={touched && error && error}
                           helperText={touched && error ? error : ""}
                           margin={touched && error ? "dense" : "normal"}
-                          value={value}
+                          value={value}                          
                           options={weekdayOptions}
-                          fullWidth                          
+                          fullWidth
                           onChange={onWorkingDaysChange}
                           onBlur={onBlur}
                         />
@@ -508,12 +508,21 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
 
                   <br />
 
+                  <ImageUploader
+                    images={profilePicture}
+                    onChange={onChangeProfilePicture}
+                    maxNumber={1}
+                    onDeleteImage={onDeleteImage}
+                  />
+
+                  <br />
 
                   <ImageUploader
                     images={photoGallery}
-                    profilePicture={profilePicture}
                     onChange={onChangePhotoGallery}
-                    onClickSetProfilePicture={onClickSetProfilePicture}
+                    multiple
+                    maxNumber={200}
+                    onDeleteImage={onDeleteImage}
                   />
 
 
@@ -538,17 +547,3 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
 
 Content.displayName = "Content"
 export default memo(Content)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
