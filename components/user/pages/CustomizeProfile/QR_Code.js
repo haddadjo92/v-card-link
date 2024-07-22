@@ -19,6 +19,7 @@ const useStyles = createUseStyles(styles)
 
 
 function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColorChange, onQrImageDimensionsChange, onQRImageChange, onRemoveQRImage, onSaveQRCodeTab }) {
+  console.log("qrImage: ", qrImage);
   const classes = useStyles()
   
   const authState = useSelector(state => state.auth)
@@ -77,9 +78,9 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
               <br />
 
 
-              <Fade in={!!qrImageFile} timeout={500}>
+              <Fade in={!!qrImage} timeout={500}>
                 <div>
-                  {!!qrImageFile && (
+                  {!!qrImage && (
                     <>
                       <div className='logo-dimensions'>
                         <Grid container spacing={2}>

@@ -625,14 +625,14 @@ export default function CustomizeProfile() {
             // ===================== QR_Code =====================
             // getUserQRCodeImage
             axiosClient.get(`/api/social-media/getUserQRCodeImage?userId=${userId}`)
-                .then(res => setQrImage(`data:image/jpeg;base64,${res.data}`))
+                .then(res => res?.data !== "Not Found" && setQrImage(`data:image/jpeg;base64,${res.data}`))
                 .catch(error => {
                     console.log("error: ", error);
                     toast.error("Fail to fetch user QR Image.")
                 })
 
             
-            // retrieveUserQRCode //! Need testing
+            // retrieveUserQRCode
             axiosClient.get(`/api/social-media/retrieveUserQRCode?userId=${userId}`)
                 .then(res => {
                     setQrColor(res?.data?.color)
@@ -648,9 +648,7 @@ export default function CustomizeProfile() {
         }
     }, [userId])
 
-
-
-    console.log("contentInitialValues: ", contentInitialValues);
+    
 
     return (
         <div className={classes.customizeProfile}>

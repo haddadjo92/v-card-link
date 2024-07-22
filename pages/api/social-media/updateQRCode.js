@@ -22,18 +22,18 @@ const apiUpdateQRCode = async (req, res) => {
             const image = fileData?.files?.image
             //----------------- fields -----------------
             const params = {
-                name: fileData?.fields?.name[0],
-                qrCodeUrl: fileData?.fields?.qrCodeUrl[0],                
-                high: (fileData?.fields?.high > 0) ? Number(fileData?.fields?.high[0]) : "",
-                width: (fileData?.fields?.width > 0) ? Number(fileData?.fields?.width[0]) : "",
-                color: fileData?.fields?.color[0],
+                name: fileData?.fields?.name?.[0],
+                qrCodeUrl: fileData?.fields?.qrCodeUrl?.[0],
+                high: (fileData?.fields?.high > 0) ? Number(fileData?.fields?.high?.[0]) : "",
+                width: (fileData?.fields?.width > 0) ? Number(fileData?.fields?.width?.[0]) : "",
+                color: fileData?.fields?.color?.[0],
             }
 
 
             if (Array.isArray(image) && image?.length > 0) {
                 const imageReadStream = fs.createReadStream(image[0]?.filepath)
-                formData.append("image", imageReadStream)
-            } else formData.append("image", "")
+                formData.append("imageFile", imageReadStream)
+            }
 
             const headers = { ...formData.getHeaders() }            
             const axios = axiosServer(req, res)
