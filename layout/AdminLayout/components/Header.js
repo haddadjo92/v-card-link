@@ -4,6 +4,8 @@ import { memo, useState, cloneElement, useMemo, useCallback } from 'react'
 import { AppBar, Toolbar, IconButton, Button, Stack, CircularProgress, Typography, useScrollTrigger } from '@mui/material';
 // *** api ***
 import axiosClient from '@/api/axiosClient'
+// *** redux ***
+import { useSelector } from 'react-redux'
 // *** Icons ***
 import { useDispatch } from 'react-redux'
 import { logout } from '@/store/reducers/authReducer'
@@ -17,12 +19,13 @@ function ElevationScroll({ children, ...props }) {
     return cloneElement(children, { elevation: trigger ? 4 : 0 });
 }
 
-function Header(props) {
-    const [logoutBtnIsLoading, setLogoutBtnIsLoading] = useState(false)
-
+function Header(props) {    
     const router = useRouter()
     const dispatch = useDispatch()
 
+    const { session } = useSelector(state => state.auth)
+
+    const [logoutBtnIsLoading, setLogoutBtnIsLoading] = useState(false)
     // ****************** Callbacks ******************
     const handleLogout = useCallback(() => {
 
@@ -50,7 +53,13 @@ function Header(props) {
                         <div className='left'>
                             <Link href="/admin">
                                 <PersonIcon />
-                                <Typography>System Admin</Typography>
+                                <Typography>
+                                    {session?.firstName && session?.firstName}
+                                    {" "}
+                                    {session?.middleName && session?.middleName}
+                                    {" "}
+                                    {session?.lastName && session?.lastName}
+                                </Typography>
                             </Link>
                         </div>
 

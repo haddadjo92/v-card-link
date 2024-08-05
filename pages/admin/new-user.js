@@ -1,5 +1,6 @@
+import { useRouter } from 'next/router'
 import { useState, useCallback, useEffect } from 'react'
-import { Grid, Container, Typography } from '@mui/material'
+import { Grid, Container, Typography, useMediaQuery } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { QRCode } from 'react-qrcode-logo';
@@ -32,12 +33,12 @@ const initialValues = {
 
 
 const validationSchema = Yup.object().shape({
-    firstName: Yup.string(),
-    middleName: Yup.string(),
-    lastName: Yup.string(),
-    phoneType: Yup.string(),
-    mobileNumber: Yup.string(),
-    email: Yup.string().email("Invalid Email Format"),
+    firstName: Yup.string().required("Required Field."),
+    middleName: Yup.string().required("Required Field."),
+    lastName: Yup.string().required("Required Field."),
+    phoneType: Yup.string().required("Required Field."),
+    mobileNumber: Yup.string().required("Required Field."),
+    email: Yup.string().email("Invalid Email Format").required("Required Field."),
     role: Yup.string().required("Required Field.")
     // password: Yup.string().required("Required Field.")
 })
@@ -61,30 +62,47 @@ const UserRoleOptions = [
 
 export default function NewUser() {
     const classes = useStyles()
+    const router = useRouter()    
+    const isSmallScreen = useMediaQuery('(max-width: 991px)')
+
+
     const [qrCode, setQrCode] = useState("")
     const [confirmDialog, setConfirmDialog] = useState(confirmDialogInitialState)
     const [phoneTypeOptions, setPhoneTypeOptions] = useState([])
+    const [username, setUsername] = useState("faisalzayed837@gmail.com")
 
     // ****************** Callbacks ******************
-    const handleCloseConfirmDialog = useCallback(() => { setConfirmDialog(confirmDialogInitialState) }, [])
-    const handleResolveConfirmDialog = useCallback(() => {
+    const handleCloseConfirmDialog = useCallback(() => { 
+        setConfirmDialog(confirmDialogInitialState) 
+        router.push("/admin/user-management")
+    }, [router])
 
-        setConfirmDialog(confirmDialogInitialState)
-    }, [])
+    const handleResolveConfirmDialog = useCallback(() => {        
+        axiosClient.get("/api/management/sendUserCredentials", { params: { username, message: window.location.origin } })
+            .then((res) => toast.success("User portal URL was sent to the user email."))
+            .catch(error => {
+                console.log("error: ", error);
+                toast.error("Fail to send user's portal URL to user email.")
+            })
+            .finally(() => {
+                setConfirmDialog(confirmDialogInitialState)
+                router.push("/admin/user-management")
+            })
+        
+    }, [username, router])
 
 
-    const onSubmit = useCallback(({ firstName, middleName, lastName, phoneType, mobileNumber, email, role }, { setSubmitting }) => {
+    const onSubmit = useCallback(({ firstName, middleName, lastName, phoneType, mobileNumber, email, role }, { setSubmitting, resetForm }) => {
 
         setSubmitting(true)
         const body = {
             email,
-            phoneRequestDTO: [],
-            // phoneRequestDTO: [
-            //     {
-            //         phoneNumber: mobileNumber,
-            //         phoneTypeId: phoneType
-            //     }
-            // ],
+            phoneRequestDTO: [
+                {
+                    phoneNumber: mobileNumber,
+                    phoneTypeId: phoneType
+                }
+            ],
             firstName,
             middleName,
             lastName,
@@ -112,12 +130,14 @@ export default function NewUser() {
         axiosClient
             .post("/api/management/createNewUsers", body)
             .then(res => {
-                setQrCode(`${window.location.origin}/qr/${res?.id}`)
+                resetForm()
+                setUsername(res?.data?.username)
+                setQrCode(`${window.location.origin}/qr/${res?.data?.id}`)
                 setConfirmDialog(prevState => {
                     return {
                         ...prevState,
                         open: true,
-                        title: "Do you wish to send the users's portal URL to this user ?",
+                        title: "Do you want to send the user login info to the user?",
                         content: ""
                     }
                 })
@@ -125,7 +145,8 @@ export default function NewUser() {
             })
             .catch(error => {
                 console.log("error: ", error);
-                toast.error("Fail to create a new user account.")
+                const backendMessage = error?.response?.data?.backendMessage
+                toast.error(backendMessage ? backendMessage : "Failed to create a new user account.")
             })
             .finally(() => setSubmitting(false))
     }, [])
@@ -137,13 +158,12 @@ export default function NewUser() {
         axiosClient.get("/api/user-controller/getPhoneType")
             .then(res => {
                 const result = _.map(res.data, ({ id, phoneType }) => ({ name: phoneType, value: id }));
-                setPhoneTypeOptions(result)                
+                setPhoneTypeOptions(result)
             })
             .catch(error => toast.error("Fail to fetch phone types."))
 
-    }, [])
+    }, [])    
 
-    
 
     return (
         <div className={classes.newUser}>
@@ -152,15 +172,15 @@ export default function NewUser() {
 
                     <ConfirmDialog
                         {...confirmDialog}
-                        onResolve={handleResolveConfirmDialog}
                         onClose={handleCloseConfirmDialog}
                         onReject={handleCloseConfirmDialog}
+                        onResolve={handleResolveConfirmDialog}
                     />
 
                     <Typography component='h1'>New User</Typography>
 
                     <Grid container>
-                        <Grid item md={6}>
+                        <Grid item md={6} xs={12}>
 
                             <Formik
                                 initialValues={initialValues}
@@ -218,7 +238,7 @@ export default function NewUser() {
 
 
                                         <Grid container spacing={2}>
-                                            <Grid item md={4}>
+                                            <Grid item md={4} xs={12}>
                                                 <Field name="phoneType">
                                                     {({ field, form, meta: { touched, error } }) => (
                                                         <CustomSelect
@@ -236,7 +256,7 @@ export default function NewUser() {
                                                 </Field>
 
                                             </Grid>
-                                            <Grid item md={8}>
+                                            <Grid item md={8} xs={12}>
                                                 <Field name="mobileNumber">
                                                     {({ field, form, meta: { touched, error } }) => (
                                                         <CustomInput
@@ -320,13 +340,13 @@ export default function NewUser() {
 
 
                         </Grid>
-                        <Grid item md={6}>
+                        <Grid item md={6} xs={12}>
 
                             <div className='qr-code-wrapper'>
                                 <div className={`qr-code-shader ${!!qrCode ? "disabled" : ""}`} />
                                 <div className='content'>
                                     <div className='qr-top-lines' />
-                                    <QRCode value={qrCode} size={250} />
+                                    <QRCode value={qrCode} size={isSmallScreen ? 150 : 250} />
                                     <div className='qr-bottom-lines' />
                                 </div>
 
@@ -334,8 +354,7 @@ export default function NewUser() {
                             </div>
 
                         </Grid>
-                    </Grid>
-
+                    </Grid>                    
 
                 </div>
             </Container>

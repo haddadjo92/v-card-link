@@ -15,6 +15,7 @@ const CustomizeProfileStyles = {
                 backgroundColor: "#333"
             },
             "& section.content-section": {
+                paddingBottom: 20,
                 "& > .loading-progress": {
                     height: "calc(100vh - 64px - 74px - 100px)",
                     display: "flex",
@@ -69,6 +70,13 @@ const CustomizeProfileStyles = {
                             },
                         }
                     }
+                },
+                "@media (max-width:991px)": {
+                    "& > form > div > div": {
+                        width: "100% !important",
+                        minWidth: "100% !important",
+                        maxWidth: "100% !important",
+                    }
                 }
             },
             "& section.design-settings": {
@@ -91,7 +99,7 @@ const CustomizeProfileStyles = {
                             color: "#333",
                             "& *": {
                                 pointerEvents: "none"
-                            },                         
+                            },
                             "&.selected": {
                                 "&, &:hover": {
                                     backgroundColor: "#333",
@@ -120,8 +128,42 @@ const CustomizeProfileStyles = {
                             }
                         }
                     }
+                },
+                "@media(max-width: 1366px)": {
+                    "& > div:nth-child(1) > div": {
+                        minWidth: "50% !important",
+                        maxWidth: "50% !important",
+                        width: "50% !important",
+                        flex: "0 0 50% !important",
+                        "& > div.user-template": {
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center"
+                        }
+                    },
+                    "& > button": {
+                        maxWidth: 143.484,
+                        display: "block",
+                        margin: "0 auto"
+                    }
+                },
+                "@media(max-width: 767px)": { 
+                    "& > div:nth-child(1) > div": {
+                        minWidth: "100% !important",
+                        maxWidth: "100% !important",
+                        width: "100% !important",
+                        flex: "0 0 100% !important",
+                    },
+                    "& .template-theme-colors": {
+                        flexDirection: "column",
+                        "& > div": {
+                            flex: "0 0 100% !important",
+                            maxWidth: "100% !important",
+                            width: "100% !important",
+                            marginBottom: 25
+                        }
+                    }
                 }
-
             }
         }
     }

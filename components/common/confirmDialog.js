@@ -29,8 +29,8 @@ function ConfirmDialog({ open, title, content, variant = "danger", resolveBtnTex
             <hr className='separator' />
 
             <div className="actions">
-                <Button variant='contained' onClick={onReject}>{resolveBtnText}</Button>
-                <Button variant='contained' onClick={onResolve}>{rejectBtnText}</Button>                
+                <Button variant='contained' onClick={onResolve}>{resolveBtnText}</Button>
+                <Button variant='contained' onClick={onReject}>{rejectBtnText}</Button>
             </div>
         </Dialog>
     )

@@ -1,6 +1,6 @@
 import FormData from "form-data";
-// *** api ***
-import axiosServer from '@/api/axiosServer'
+import fetch from 'isomorphic-fetch'
+import { getCookie } from 'cookies-next'
 // *** shared ***
 import readFile from '@/shared/functions/readFormidableFile'
 
@@ -13,6 +13,8 @@ const apiUpdateUserImage = async (req, res) => {
             return res.status(400).json({ "code": 400, "message": "Bad request 'userId' is not presented." })
         else {
             try {
+                const token = getCookie("token", { req, res })
+
                 const formidableData = await readFile(req)
                 const fs = require('fs');
 
@@ -25,10 +27,18 @@ const apiUpdateUserImage = async (req, res) => {
                     formData.append("image", imageReadStream)
                 }
 
-                const headers = { ...formData.getHeaders() }
-                const params = { id: Number(userId) }
-                const axios = axiosServer(req, res)
-                const data = (await axios.post(`/images/${userId}/image`, formData, { headers, params })).data
+                const data = (await fetch(`${process.env.BASE_URL}/images/${userId}/image?id=${userId}`, {
+                    method: "POST",
+                    body: formData,
+                    credentials: "include",
+                    headers: {
+                        ...formData.getHeaders(),
+                        Cookie: token
+                    }
+                })).json()
+
+
+
                 return res.status(200).json(data)
             }
             catch (error) {

@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { Container, Typography } from '@mui/material'
+// *** redux ***
+import { useSelector } from 'react-redux'
 // *** components ***
 import CustomButton from '@/components/common/FormFields/CustomButton'
 // *** Icons ***
@@ -13,6 +15,8 @@ const useStyles = createUseStyles(styles)
 export default function AdminHome() {
     const classes = useStyles()    
     const router = useRouter()
+
+    const { session } = useSelector(state => state.auth)
 
     // ****************** Memos ******************
     const newUserBtnStartIcon = useMemo(() => <AddIcon />, [])
@@ -28,7 +32,13 @@ export default function AdminHome() {
                     <Typography component="h1">
                         Welcome Back,
                         <br />
-                        Admin
+                        <small>
+                            {session?.firstName && session?.firstName}
+                            {" "}
+                            {session?.middleName && session?.middleName}
+                            {" "}
+                            {session?.lastName && session?.lastName}
+                        </small>
                     </Typography>
 
                     <div className='btn-wrapper'>

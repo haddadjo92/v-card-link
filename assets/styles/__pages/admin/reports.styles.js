@@ -2,6 +2,7 @@ const ReportsStyles = {
     reports: {
         "& > div > .content": {
             paddingTop: 15,
+            paddingBottom: 30,
             "& .top-section": {
                 display: "flex",
                 alignItems: "center",

@@ -10,7 +10,9 @@ const apiCreateNewUsers = async (req, res) => {
             return res.status(200).json(data);
         }
         catch (error) {
-            res.status(error?.response?.status).json({ error })
+            if(error.response)
+                res.status(error?.response?.status).json({ backendMessage: error.response.data })
+            else return res.status(error?.response?.status).json({ error })
         }
     }
 }

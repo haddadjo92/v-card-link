@@ -6,7 +6,10 @@ const QrCodeGeneratorStyles = {
             paddingTop: 15,
             "& > h1": {
                 fontSize: 40,
-                marginBottom: 25
+                marginBottom: 25,
+                "@media (max-width: 386px)": {
+                    fontSize: 32,
+                }
             },
             "& .MuiTabs-flexContainer": {
                 "& button": {
@@ -63,7 +66,19 @@ const QrCodeGeneratorStyles = {
                             }
                         }
                     }
-                }
+                },
+                "& > div": {
+                    "@media (max-width: 750px)": {
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        borderBottom: "1px solid #eee",
+                        "& .control": {
+                            margin: "0px !important",
+                            width: "100%",
+                            minWidth: "100% !important"
+                        }
+                    }
+                },
             },
             "& .generated-qrs": {
                 "& table": {
@@ -140,13 +155,16 @@ const QRDialogStyles = {
 
     },
     dialogTitle: {
-        padding: "10px 24px"
+        padding: "10px 24px",
+        "@media(max-width: 991px)": {
+            textAlign: "center"
+        }
     },
     dialogContent: {
         minHeight: 350,
         display: "flex",
         alignItems: "center",
-        justifyContent: "center", 
+        justifyContent: "center",
         "& .qr-code-wrapper": {
             height: "100%",
             display: "flex",
@@ -187,6 +205,12 @@ const QRDialogStyles = {
                     }
                 },
             }
+        }
+    },
+    dialogActions: {
+        "@media(max-width: 991px)": {
+            // display: "flex",
+            justifyContent: "center !important"
         }
     }
 }

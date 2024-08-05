@@ -180,6 +180,7 @@ export default function CustomizeProfile() {
     const [qrImageFile, setQrImageFile] = useState(null)
     const [qrImage, setQrImage] = useState(null)
     const [qrImageDimensions, setQrImageDimensions] = useState({ width: 100, height: 100 })
+    const [qrImageIsDeleted, setQrImageIsDeleted] = useState(false)
 
     // ****************** Callbacks ******************
     const handleTabChange = useCallback((event, newValue) => { setSelectedTab(newValue); }, [])
@@ -300,7 +301,10 @@ export default function CustomizeProfile() {
             formData.append("imageFile", profilePicture[0]?.file)
 
             axiosClient.post(`/api/images/updateUserImage`, formData, { headers, params: { userId } })
-                .then(res => toast.success("Profile picture was successfully updated."))
+                .then(res => {
+                    console.log("res: ", res);
+                    toast.success("Profile picture was successfully updated.")
+                })
                 .catch(error => {
                     console.log("error: ", error);
                     toast.error("Fail to update profile picture.")
@@ -312,7 +316,10 @@ export default function CustomizeProfile() {
         // delete profile picture
         if (profilePictureIsDeleted) {
             axiosClient.delete("/api/images/deleteProfileImage", { params: { userId } })
-                .then(res => toast.success("Profile Image was successfully deleted."))
+                .then(res => {
+                    console.log("res: ", res);
+                    toast.success("Profile Image was successfully deleted.")
+                })
                 .catch(error => {
                     console.log("error: ", error);
                     toast.error("Fail to delete profile image.")
@@ -330,10 +337,7 @@ export default function CustomizeProfile() {
             const headers = { contentType: "multipart/form-data" }
 
             axiosClient.put(`/api/images/addUserImages`, formData, { headers, params: { userId } })
-                .then(res => {
-                    console.log("res: ", res);
-                    toast.success("new photoGallery images was successfully added.")
-                })
+                .then(res => toast.success("new photoGallery images was successfully added."))
                 .catch(error => {
                     console.log("error: ", error);
                     toast.error("Fail to add new photoGallery images.")
@@ -343,10 +347,7 @@ export default function CustomizeProfile() {
         // Delete photo gallery images
         if (Array.isArray(deletedPhotoGalleryIds) && deletedPhotoGalleryIds?.length > 0) {
             axiosClient.delete('/api/images/deleteProfileImages', { data: deletedPhotoGalleryIds })
-                .then(res => {
-                    console.log("res: ", res);
-                    toast.success("Images marked as delete on photoGallery was successfully deleted.")
-                })
+                .then(res => toast.success("Images marked as delete on photoGallery was successfully deleted."))
                 .catch(error => {
                     console.log("error: ", error);
                     toast.error("Fail to delete marked images on photoGallery.")
@@ -397,10 +398,7 @@ export default function CustomizeProfile() {
         else {
 
             axiosClient.put(`/api/social-media/updateUserTemplateDesign?userId=${userId}`, body)
-                .then(res => {
-                    console.log("res: ", res);
-                    toast.success("Design/settings configurations has been updated successfully.")
-                })
+                .then(res => toast.success("Design/settings configurations has been updated successfully."))
                 .catch(error => {
                     console.log("error: ", error);
                     toast.error("Fail to update design/settings configurations")
@@ -423,7 +421,12 @@ export default function CustomizeProfile() {
     const handleRemoveQRImage = useCallback(() => {
         setQrImageFile(null)
         setQrImage(null)
-    }, [])
+
+        if (!!qrImage && !qrImageFile)
+            setQrImageIsDeleted(true)
+        else setQrImageIsDeleted(false)
+
+    }, [qrImage, qrImageFile])
 
 
     const handleQrImageDimensionsChange = useCallback((event) => {
@@ -445,21 +448,35 @@ export default function CustomizeProfile() {
 
         if (qrImageFile)
             formData.append("image", qrImageFile)
+        
+        // formData.append("qrCodeUrl", `${window.location.origin}/qr/${userId}`)
+        // formData.append("high", qrImageDimensions.height)
+        // formData.append("width", qrImageDimensions.width)
+        // formData.append("color", qrColor)
+        // formData.append("isImageDeleted", qrImageIsDeleted ? '1' : '0')
 
-        formData.append("name", "")
-        formData.append("qrCodeUrl", `${window.location.origin}/qr/${userId}`)
-        formData.append("high", qrImageDimensions.height)
-        formData.append("width", qrImageDimensions.width)
-        formData.append("color", qrColor)
 
-        axiosClient.put(`/api/social-media/updateQRCode?userId=${userId}`, formData, { headers })
-            .then(() => toast.success("Your QR Customization has been successfully saved."))
+        const params = {
+            userId: String(userId),
+            qrCodeUrl: String(`${window.location.origin}/qr/${userId}`),
+            high: String(qrImageDimensions.height),
+            width: String(qrImageDimensions.width),
+            color: String(qrColor),
+            isImageDeleted: qrImageIsDeleted ? 'true' : 'false'
+        }
+
+
+        axiosClient.put(`/api/social-media/updateQRCode`, formData, { headers, params })
+            .then((res) => {
+                console.log("res: ", res);
+                toast.success("Your QR Customization has been successfully saved.")
+            })
             .catch(error => {
                 console.log("error: ", error);
                 toast.error("Fail to save QR Customization.")
             })
 
-    }, [qrColor, qrImageDimensions.height, qrImageDimensions.width, qrImageFile, userId])
+    }, [qrColor, qrImageDimensions.height, qrImageDimensions.width, qrImageFile, qrImageIsDeleted, userId])
 
     // ****************** Memos ******************
     const boxSX = useMemo(() => ({ borderBottom: 1, borderColor: 'divider' }), [])
@@ -631,7 +648,7 @@ export default function CustomizeProfile() {
                     toast.error("Fail to fetch user QR Image.")
                 })
 
-            
+
             // retrieveUserQRCode
             axiosClient.get(`/api/social-media/retrieveUserQRCode?userId=${userId}`)
                 .then(res => {
@@ -648,7 +665,7 @@ export default function CustomizeProfile() {
         }
     }, [userId])
 
-    
+
 
     return (
         <div className={classes.customizeProfile}>

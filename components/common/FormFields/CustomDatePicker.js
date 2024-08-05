@@ -1,4 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
+import { useMediaQuery } from '@mui/material'
 import DatePicker from "react-multi-date-picker";
 // *** animations ***
 import transition from "react-element-popper/animations/transition"
@@ -16,7 +17,8 @@ const useStyles = createUseStyles(styles)
 
 
 function CustomDatePicker({ value, onChange, format, ...props }) {
-    const classes = useStyles()
+    const classes = useStyles()    
+    const isSmallScreen = useMediaQuery('(max-width: 991px)')    
 
     // ****************** Memos ******************
     const animations = useMemo(() => {
@@ -56,7 +58,7 @@ function CustomDatePicker({ value, onChange, format, ...props }) {
                 render={render}
                 format={format}
                 fixMainPosition
-                plugins={plugins}                
+                {...(!isSmallScreen) && { plugins }}
             />
         </div>
     )

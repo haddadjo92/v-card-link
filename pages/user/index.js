@@ -17,7 +17,7 @@ export default function UserHome() {
   const classes = useStyles()
   const router = useRouter()
 
-  const authReducer = useSelector(state => state.auth)
+  const { session } = useSelector(state => state.auth)
 
   const [changePasswordModal, setChangePasswordModal] = useState(changePasswordModalInitialState)
 
@@ -28,10 +28,10 @@ export default function UserHome() {
 
   // ****************** Side Effects ******************
   useEffect(() => {
-    
-    if (authReducer?.session?.firstLogin)
+
+    if (session?.firstLogin)
       setChangePasswordModal({ open: true })
-  }, [authReducer])
+  }, [session])
 
   return (
     <div className={classes.userHome}>
@@ -47,7 +47,13 @@ export default function UserHome() {
           <Typography component="h1">
             Welcome Back,
             <br />
-            User
+            <small>
+              {session?.firstName && session?.firstName}
+              {" "}
+              {session?.middleName && session?.middleName}
+              {" "}
+              {session?.lastName && session?.lastName}
+            </small>
           </Typography>
 
           <div className='btn-wrapper'>

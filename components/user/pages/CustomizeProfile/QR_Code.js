@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import { memo } from 'react'
-import { Fade, Typography, Grid, Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, IconButton } from '@mui/material'
+import { Fade, Typography, Grid, Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, IconButton, useMediaQuery } from '@mui/material'
 import { QRCode } from 'react-qrcode-logo';
 // *** redux ***
 import { useSelector } from 'react-redux'
@@ -18,9 +18,9 @@ import { createUseStyles } from 'react-jss'
 const useStyles = createUseStyles(styles)
 
 
-function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColorChange, onQrImageDimensionsChange, onQRImageChange, onRemoveQRImage, onSaveQRCodeTab }) {
-  console.log("qrImage: ", qrImage);
-  const classes = useStyles()
+function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColorChange, onQrImageDimensionsChange, onQRImageChange, onRemoveQRImage, onSaveQRCodeTab }) {  
+  const classes = useStyles()  
+  const isSmallScreen = useMediaQuery('(max-width: 991px)')
   
   const authState = useSelector(state => state.auth)
   const userId = authState?.session?.id;
@@ -32,7 +32,7 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
 
       <div className='inner-content'>
         <Grid container>
-          <Grid item md={3}>
+          <Grid item md={3} xs={12}>
             <section className='left-section'>
 
               <div className='qr-code-wrapper'>
@@ -43,7 +43,7 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
                     logoImage={qrImage}
                     logoWidth={qrImageDimensions.width}
                     logoHeight={qrImageDimensions.height}
-                    size={250}
+                    size={isSmallScreen ? 150 : 250}
                     fgColor={qrColor}
                   />
                   <div className='qr-bottom-lines' />
@@ -54,7 +54,7 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
 
           </Grid>
 
-          <Grid item md={9}>
+          <Grid item md={9} xs={12}>
 
             <section className='right-section'>
               <Typography component='h3'>QR Code Color</Typography>
@@ -84,7 +84,7 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
                     <>
                       <div className='logo-dimensions'>
                         <Grid container spacing={2}>
-                          <Grid item md={6}>
+                          <Grid item xs={6}>
                             <CustomInput
                               name="width"
                               value={qrImageDimensions.width}
@@ -96,7 +96,7 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
                               onChange={onQrImageDimensionsChange}
                             />
                           </Grid>
-                          <Grid item md={6}>
+                          <Grid item xs={6}>
                             <CustomInput
                               name="height"
                               value={qrImageDimensions.height}
@@ -115,7 +115,7 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
                     </>
                   )}
 
-                  {!!qrImageFile && (
+                  {!!qrImage && (
                     <TableContainer component={Paper} className='attachment-table-container'>
                       <Table size="small">
                         <TableHead>
@@ -129,7 +129,7 @@ function QRCodeTab({ qrColor, qrImage, qrImageFile, qrImageDimensions, onQRColor
                           <TableRow>
                             <TableCell>
                               <div className='attachment-name'>
-                                {qrImageFile?.name}
+                                {qrImageFile?.name ? qrImageFile?.name : "user-qr-image"}
                               </div>
 
                             </TableCell>

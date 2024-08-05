@@ -148,7 +148,7 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
             <Form>
 
               <Grid container spacing={2}>
-                <Grid className='section1' item md={4}> {/* Section 1 */}
+                <Grid className='section1' item md={4} sm={12}> {/* Section 1 */}
 
                   {/****************** Full Name ******************/}
                   <Stack direction="row" alignItems="center" justifyContent="center">
@@ -284,7 +284,7 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
 
 
                 </Grid>
-                <Grid className='section2' item md={4}> {/* Section 2 */}
+                <Grid className='section2' item md={4} sm={12}> {/* Section 2 */}
 
                   {/****************** About Me (Bio) ******************/}
                   <Stack direction="row" alignItems="center" justifyContent="center">
@@ -389,7 +389,7 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
                           error={touched && error && error}
                           helperText={touched && error ? error : ""}
                           margin={touched && error ? "dense" : "normal"}
-                          value={value}                          
+                          value={value}
                           options={weekdayOptions}
                           fullWidth
                           onChange={onWorkingDaysChange}
@@ -406,7 +406,7 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
                   {/****************** Working Hours ******************/}
                   <Stack direction="row" alignItems="center" justifyContent="center">
                     <Grid container spacing={2}>
-                      <Grid item md={6}>
+                      <Grid item xs={6}>
 
                         <Field name="workingHoursFrom">
                           {({ field, form, meta: { touched, error } }) => (
@@ -425,7 +425,7 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
                         </Field>
 
                       </Grid>
-                      <Grid item md={6}>
+                      <Grid item xs={6}>
 
                         <Field name="workingHoursTo">
                           {({ field, form, meta: { touched, error } }) => (
@@ -475,7 +475,7 @@ const Content = forwardRef(({ loading, initialValues, activeFields, socialLinkId
                   </Stack>
 
                 </Grid>
-                <Grid item md={4}> {/* Section 3 */}
+                <Grid item md={4} sm={12}> {/* Section 3 */}
 
                   <div className='social-links'>
                     {socialLinksData.map(({ id, theme, icon: Icon }) => (

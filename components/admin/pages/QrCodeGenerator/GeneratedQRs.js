@@ -66,12 +66,21 @@ function GeneratedQRs() {
             .then(res => {
                 const tableData = _.map(res?.data, ({ id, fieldName, fieldValue, active }) => ({ id, type: fieldName, value: fieldValue, active }))
                 setTableDate(tableData)
+                setLoading(false)
             })
-            .catch(error => {
-                console.log("error: ", error);
-                toast.error("Fail to fetch generated QR's")
+            .catch(() => {
+                setLoading(true)
+                axiosClient.get(`/api/qr-generator/retrieveUserQRCode?userId=${userId}`)
+                    .then(res => {
+                        const tableData = _.map(res?.data, ({ id, fieldName, fieldValue, active }) => ({ id, type: fieldName, value: fieldValue, active }))
+                        setTableDate(tableData)
+                    })
+                    .catch(error => {
+                        console.log("error: ", error);
+                        toast.error("Fail to fetch generated QR's")
+                    })
+                    .finally(() => setLoading(false))
             })
-            .finally(() => setLoading(false))
     }, [userId])
 
 
@@ -120,7 +129,7 @@ function GeneratedQRs() {
                                                     type === "email" ? `mailto:${value}` :
                                                         value
                                         }
-                                        className='view-qr-btn'                                        
+                                        className='view-qr-btn'
                                         variant='text'
                                         disableRipple
                                         onClick={handleViewQRCode}

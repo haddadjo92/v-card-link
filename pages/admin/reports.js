@@ -24,15 +24,6 @@ const reportOptions = [
 ]
 
 
-// const userOptions = [
-//   { name: "Username1", value: "username1" },
-//   { name: "Username2", value: "username2" },
-//   { name: "Username3", value: "username3" },
-//   { name: "Username4", value: "username4" },
-// ]
-
-
-
 const visitorsThead = [
   { id: 1, title: "#", align: "left" },
   { id: 1, title: "Username", align: "left" },
@@ -107,7 +98,7 @@ export default function Reports() {
 
     if (reportType === "numOfUsers") {
       const startDate = dayjs(fromUsersDate).format("YYYY-MM-DD") + "T00:00:00.0000";
-      const endDate = dayjs(toUsersDate).format("YYYY-MM-DD") + "T00:00:00.0000"
+      const endDate = dayjs(toUsersDate).format("YYYY-MM-DD") + "T23:59:00.0000"
 
       axiosClient.get("/api/report-controller/getProfile", { params: { startDate, endDate } })
         .then(res => {
@@ -131,7 +122,7 @@ export default function Reports() {
     }
     else {
       const startDate = dayjs(fromVisitorsDate).format("YYYY-MM-DD") + "T00:00:00.0000";
-      const endDate = dayjs(toVisitorsDate).format("YYYY-MM-DD") + "T00:00:00.0000"
+      const endDate = dayjs(toVisitorsDate).format("YYYY-MM-DD") + "T23:59:00.0000"
 
       axiosClient.get("/api/report-controller/getNumberOfVisitor", { params: { userId: selectedUser, startDate, endDate } })
         .then(res => {
@@ -177,7 +168,7 @@ export default function Reports() {
 
 
           <Grid container spacing={5}>
-            <Grid item md={6}>
+            <Grid item md={6} xs={12}>
               <CustomSelect
                 labelText="Select Report"
                 placeholder="Select a Report"
@@ -242,7 +233,7 @@ export default function Reports() {
 
 
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={6} xs={12}>
 
               <Fade in={reportType === "numOfVisitors"} timeout={1000}>
                 <Box>

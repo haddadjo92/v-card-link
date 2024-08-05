@@ -5,9 +5,14 @@ const NewUserStyles = {
     newUser: {
         "& > div > .content": {
             paddingTop: 15,
+            paddingBottom: 20,
             "& > h1": {
                 fontSize: 40,
-                marginBottom: 25
+                marginBottom: 25,
+                "@media(max-width: 991px)": {
+                    textAlign: "center",
+                    marginBottom: 50
+                }
             },
             "& .qr-form": {
                 "& > button": {
@@ -31,7 +36,7 @@ const NewUserStyles = {
                     zIndex: 11,
                     "&.disabled": {
                         zIndex: -11,
-                        opacity: 0                        
+                        opacity: 0
                     }
                 },
                 "& .content": {
@@ -68,6 +73,34 @@ const NewUserStyles = {
                             right: -27
                         }
                     },
+                }
+            },
+            "@media(max-width: 991px)": {
+                "& > div": {
+                    flexDirection: "column-reverse",
+                    alignItems: "center",
+
+                    "& > div": {
+                        maxWidth: "100% !important",
+                        width: "100% !important",
+                        flex: "0 0 100% !important",
+                        "&:nth-child(2)": {
+                            "& .qr-code-wrapper": {
+                                marginBottom: 50,
+                                "& .qr-code-shader": {
+                                    width: 170,
+                                    height: 170,
+                                    top: "calc(50% - 85px)",
+                                    left: "calc(50% - 85px)",
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "@media(max-width: 425px)": {
+                "& > div > div:nth-child(1) > form > button": {
+                    width: "100%",
                 }
             }
         }

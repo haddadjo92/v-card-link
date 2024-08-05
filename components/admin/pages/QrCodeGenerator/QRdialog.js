@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, useMediaQuery } from '@mui/material'
 import { QRCode } from 'react-qrcode-logo';
 // *** styles ***
 import { QRDialogStyles } from '@/assets/styles/__pages/admin/qrCodeGenerator.styles'
@@ -8,7 +8,8 @@ const useStyles = createUseStyles(QRDialogStyles)
 
 function QRdialog({ open, url, onClose }) {
     const classes = useStyles()
-
+    const isMobile = useMediaQuery('(max-width: 420px)')
+    const isSmallScreen = useMediaQuery('(max-width: 991px)')
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth>
@@ -18,14 +19,14 @@ function QRdialog({ open, url, onClose }) {
                 <div className='qr-code-wrapper'>
                     <div className='content'>
                         <div className='qr-top-lines' />
-                        <QRCode value={url} size={250} />
+                        <QRCode value={url} size={isMobile ? 150 : isSmallScreen ? 200 : 250} />
                         <div className='qr-bottom-lines' />
                     </div>
                 </div>
 
 
             </DialogContent>
-            <DialogActions>
+            <DialogActions className={classes.dialogActions}>
                 <Button
                     autoFocus
                     color='error'

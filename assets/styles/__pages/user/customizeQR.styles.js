@@ -1,10 +1,14 @@
-import { darken } from 'polished'
+import { darken, margin } from 'polished'
 
 const CustomizeQRStyles = {
     customizeQR: {
+        paddingBottom: 15,
         "& h1": {
             fontSize: 24,
-            fontWeight: 600
+            fontWeight: 600,
+            "@media (max-width: 1200px)": {
+                textAlign: "center"
+            }
         },
         "& .inner-content": {
             marginTop: 60,
@@ -117,8 +121,48 @@ const CustomizeQRStyles = {
                         padding: "7px 15px"
                     }
                 }
+            },
+            "@media (max-width: 1200px)": {
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginLeft: 0,
+                "& > div > div": {
+                    width: "100% !important",
+                    maxWidth: "100% !important",
+                    flex: "0 0 100% !important",
+                    justifyContent: "center",
+                    "& .left-section": {
+                        display: "flex",
+                        justifyContent: "center",
+                        paddingRight: 0,
+                    },
+                    "& .right-section": {
+                        border: "unset",
+                        paddingLeft: 0,
+                        marginTop: 50,
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        "& .file-upload": {
+                            maxWidth: 400,
+                            margin: "0 auto",
+                            width: "100%"
+                        },
+                        "& .logo-dimensions": {
+                            flexWrap: "nowrap"
+                        }
+                    }
+                }
+            },
+            "@media (max-width: 425px)": {
+                "& > button": {
+                    width: "100%"
+                }
             }
-        }
+        },
+
     }
 }
 

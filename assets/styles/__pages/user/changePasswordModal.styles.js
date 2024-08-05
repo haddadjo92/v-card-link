@@ -26,8 +26,16 @@ const ChangePasswordModalStyles = {
                 backgroundColor: "#eee",
                 "&:hover": {
                     backgroundColor: "#df0000",
-                }
+                },
             }
+        },
+        "& > form > button": {
+            "@media(max-width: 991px)": {
+                width: "100%"
+            }
+        },
+        "@media(max-width: 640px)": {
+            margin: "0px 20px"
         }
     }
 }

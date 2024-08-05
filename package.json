@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 8085",
     "lint": "next lint"
   },
   "dependencies": {
@@ -26,6 +26,8 @@
     "formidable": "^3.5.1",
     "formik": "^2.4.6",
     "framer-motion": "^11.2.10",
+    "isomorphic-fetch": "^3.0.0",
+    "isomorphic-unfetch": "^4.0.2",
     "jss": "9.8.7",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",

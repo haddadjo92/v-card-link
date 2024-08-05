@@ -1,11 +1,11 @@
 import FormData from "form-data";
-// *** api ***
-import axiosServer from '@/api/axiosServer'
+import fetch from 'isomorphic-fetch'
+import { getCookie } from 'cookies-next'
 // *** shared ***
 import readFile from '@/shared/functions/readFormidableFile'
 
 
-const apiForwardEmail = async (req, res) => {
+const apiUpdateQRFile = async (req, res) => {
     if (req.method !== "POST")
         res.status(405).json({ "code": 405, "message": "Method Not Allowed" })
     else {
@@ -15,6 +15,8 @@ const apiForwardEmail = async (req, res) => {
             if (!userId)
                 return res.status(400).json({ "code": 400, "message": "Bad request 'userId' is not presented." })
             else {
+                const token = getCookie("token", { req, res })
+
                 const formidableData = await readFile(req)
                 const fs = require('fs');
 
@@ -29,10 +31,17 @@ const apiForwardEmail = async (req, res) => {
                     formData.append("file", fileReadStream)
                 }
 
-                const axios = axiosServer(req, res)
-
-                const headers = { ...formData.getHeaders() }
-                const data = (await axios.post(`/qr/${userId}/QR/file`, formData, { headers })).data
+                
+                                                                   
+                const data = (await fetch(`${process.env.BASE_URL}/qr/${userId}/QR/file`, {
+                    method: "POST",
+                    body: formData,
+                    credentials: "include",
+                    headers: {
+                        ...formData.getHeaders(),
+                        Cookie: token
+                    }
+                })).json()
 
                 return res.status(200).json(data)
             }
@@ -45,4 +54,4 @@ const apiForwardEmail = async (req, res) => {
 
 
 export const config = { api: { bodyParser: false } };
-export default apiForwardEmail
+export default apiUpdateQRFile

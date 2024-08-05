@@ -99,13 +99,13 @@ function GenerateNewQRTab() {
     const title = event.target.getAttribute("data-title")
     const value = values[name]
 
-    setGenerateQR(prevState => ({ ...prevState, [name]: true }))
+    setGenerateQR(prevState => ({ ...prevState, [name]: true }))    
 
     let promise;
     if (name === "file") {
-      
+
       const headers = { "Content-type": "multipart/form-data" }
-      const formData = new FormData()      
+      const formData = new FormData()
 
       formData.append("file", values.file)
       promise = axios.post(`/api/qr-generator/updateQRCodeFile?userId=${userId}`, formData, { headers })

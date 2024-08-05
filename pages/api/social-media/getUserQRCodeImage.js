@@ -1,6 +1,6 @@
 import axiosServer from '@/api/axiosServer'
 
-const apiGetPhoneType = async (req, res) => {
+const apiGetUserQRCodeImage = async (req, res) => {
     if (req.method !== "GET")
         res.status(405).json({ "code": 405, "message": "Method Not Allowed" })
     else {
@@ -11,15 +11,15 @@ const apiGetPhoneType = async (req, res) => {
                 res.status(400).json({ code: 400, message: "Bad request, 'userId' is not presented." })
             else {
                 const axios = axiosServer(req, res)
-                const data = (await axios.get(`/social/${userId}/QR/image`, { params: { userId: Number(userId) } })).data
+                const data = (await axios.get(`/social/${userId}/QR/image?userId=${userId}`)).data
                 return res.status(200).json(data);
             }
         }
         catch (error) {
             // res.status(error?.response?.status).json({ error })
-            res.status(500).json({ error })
+            res.status(500).json({ error: error.message })
         }
     }
 }
 
-export default apiGetPhoneType
+export default apiGetUserQRCodeImage

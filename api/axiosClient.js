@@ -4,7 +4,7 @@ import { logout } from '../store/reducers/authReducer';
 
 
 const axiosClient = axios.create({
-    withCredentials: true    
+    withCredentials: false    
 });
 
 

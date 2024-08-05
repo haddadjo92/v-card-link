@@ -65,7 +65,7 @@ const ChromeColorPicker = dynamic(() => import('@uiw/react-color').then(({ Chrom
 
 
 const TemplateWrapper = memo(({ selectedTemplate, templateId, children, onSelectTemplate }) => (
-  <Grid item md={3}>
+  <Grid item md={3} xs={12}>
     <div className='user-template'>
       <div className="template-wrapper">
         {children}

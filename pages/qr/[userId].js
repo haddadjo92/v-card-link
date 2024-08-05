@@ -14,8 +14,7 @@ import { createUseStyles } from 'react-jss'
 const useStyles = createUseStyles(styles)
 
 export default function TemplatePage({ error, data }) {
-    const classes = useStyles()
-    console.log("data: ", data);
+    const classes = useStyles()    
 
     // ************* Memos *************
     const containerSX = useMemo(() => ({ maxWidth: 850, pl: 2, pr: 2 }), [])

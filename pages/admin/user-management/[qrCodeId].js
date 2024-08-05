@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useCallback } from 'react'
-import { Grid, Container, Typography } from '@mui/material'
+import { Grid, Container, Typography, useMediaQuery } from '@mui/material'
 import { QRCode } from 'react-qrcode-logo';
 import { toast } from 'react-toastify'
 import _ from 'lodash'
@@ -20,6 +20,8 @@ const useStyles = createUseStyles(styles)
 export default function UserManagementDetails({ errorFetchingUserProfile, errorFetchingPhoneTypes, id, firstName, middleName, lastName, phones, phoneTypeOptions, email }) {
     const classes = useStyles()
     const router = useRouter()
+    const isSmallScreen = useMediaQuery('(max-width: 991px)')
+
 
     // ****************** Callbacks ******************
     const handleBack = useCallback(() => { router.back() }, [router])
@@ -84,7 +86,7 @@ export default function UserManagementDetails({ errorFetchingUserProfile, errorF
                                             readOnly
                                         />
 
-                                        <Grid container spacing={2}>
+                                        <Grid container spacing={2} sx={{ flexWrap: "nowrap" }}>
                                             <Grid item md={4}>
                                                 <CustomSelect
                                                     labelText="Phone Type"
@@ -97,7 +99,7 @@ export default function UserManagementDetails({ errorFetchingUserProfile, errorF
                                                 />
 
                                             </Grid>
-                                            <Grid item md={8}>
+                                            <Grid item md={8} xs={12}>
                                                 <CustomInput
                                                     labelText="Mobile Number"
                                                     placeholder="Mobile Number"
@@ -145,7 +147,7 @@ export default function UserManagementDetails({ errorFetchingUserProfile, errorF
                                     <div className='qr-code-wrapper'>
                                         <div className='content'>
                                             <div className='qr-top-lines' />
-                                            <QRCode value={`${window.location.origin}/qr/${id}`} size={250} />
+                                            <QRCode value={`${window.location.origin}/qr/${id}`} size={isSmallScreen ? 150 : 250} />
                                             <div className='qr-bottom-lines' />
                                         </div>
                                     </div>

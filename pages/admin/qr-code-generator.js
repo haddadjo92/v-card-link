@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react'
-import { Container, Typography, Tabs, Box, Tab } from '@mui/material'
+import { Container, Typography, Tabs, Box, Tab, useMediaQuery } from '@mui/material'
 // *** tabs ***
 import GenerateNewQR from '@/components/admin/pages/QrCodeGenerator/generateNewQR'
 import GeneratedQRs from '@/components/admin/pages/QrCodeGenerator/GeneratedQRs'
@@ -19,9 +19,11 @@ function a11yProps(index) {
 }
 
 
-function CustomTabPanel({ children, value, index, ...other }) {  
+function CustomTabPanel({ children, value, index, ...other }) {    
+  const isSmallScreen = useMediaQuery('(max-width: 991px)')
+
   // ****************** Memos ******************
-  const boxSX = useMemo(() => ({ p: 3 }), [])
+  const boxSX = useMemo(() => ({ p: isSmallScreen ? 1 : 3 }), [isSmallScreen])
 
   return (
     <div role="tabpanel" hidden={value !== index} id={`qr-${index}`} {...other}>
@@ -34,8 +36,7 @@ function CustomTabPanel({ children, value, index, ...other }) {
 
 export default function QrCodeGenerator() {
   const classes = useStyles()
-  const [selectedTab, setSelectedTab] = useState(0)
-
+  const [selectedTab, setSelectedTab] = useState(0)  
 
   // ****************** Callbacks ******************
   const handleTabChange = useCallback((event, newValue) => { setSelectedTab(newValue); }, [])
